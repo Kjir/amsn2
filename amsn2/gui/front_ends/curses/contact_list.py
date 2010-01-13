@@ -4,6 +4,7 @@ import curses
 from threading import Thread
 from threading import Condition
 import time
+import sys
 
 class aMSNContactListWindow(base.aMSNContactListWindow):
     def __init__(self, amsn_core, parent):
@@ -25,7 +26,6 @@ class aMSNContactListWindow(base.aMSNContactListWindow):
         self._stdscr.refresh()
 
     def _on_char_cb(self, ch):
-        import sys
         print >> sys.stderr, "Length is %d" % len(ch)
         print >> sys.stderr, "Received %s in Contact List" % ch.encode("UTF-8")
         if ch == "KEY_UP":
@@ -119,26 +119,49 @@ class aMSNContactListWidget(base.aMSNContactListWidget):
             self._win.clear()
             (y, x) = self._stdscr.getmaxyx()
             self._win.move(0,1)
-            available = y
-            gso = []
+            # How many screenfulls should we skip?
+            skip = int((self._selected - 1) / (y - 2)) * (y - 2)
+            available = y - 2
+            list = []
             for g in self._groups_order:
-                available -= 1
-                available -= len(self._groups[g].contact_ids)
-                gso.append(g)
+                if self._groups[g] in None:
+                    continue
+                # If there is no display space available, exit the loop
                 if available <= 0:
                     break
+                # Check if we should skip some more lines
+                if skip <= 0:
+                    # If not, display the group
+                    available -= 1
+                    dis_groups += 1
+                else:
+                    # Otherwise skip the group name display, go on with checks for group contacts
+                    skip -= 1
+                gso.append(g)
+                # If we must skip some more lines
+                if skip > 0:
+                    if skip >= len(self._groups[g].contact_ids):
+                        # If we should skip the whole group, remove it from list and go on with next group
+                        skip -= len(self._groups[g].contact_ids)
+                        gso.pop()
+                        continue
+                # Otherwise just trim the contacts we should skip, limited to available display space
+                gso[-1].contact_ids = gso[-1].contact_ids[skip:skip + available]
+                skip = 0
+
+                # Subtract from available display space the number of contacts currently on display
+                available -= len(gso[-1].contact_ids)
             gso.reverse()
-            available = y
+            skip = int((self._selected - 1) / (y - 2)) * (y - 2)
             i = 0
             for g in gso:
                 if self._groups[g] is not None:
-                    available -= 1
                     cids = self._groups[g].contact_ids
-                    cids = cids[:available]
                     cids.reverse()
+                    # Display contacts
                     for c in cids:
                         if self._contacts.has_key(c) and self._contacts[c]['cView'] is not None:
-                            if i == y - self._selected:
+                            if i == y - 2 - (self._selected - skip):
                                 self._win.bkgdset(curses.color_pair(1))
                             self._win.insstr(self._contacts[c]['cView'].name.toString())
                             self._win.bkgdset(curses.color_pair(0))
@@ -149,14 +172,17 @@ class aMSNContactListWidget(base.aMSNContactListWidget):
                             self._win.insertln()
                             self._win.bkgdset(curses.color_pair(0))
                             i += 1
-                    if i == y - self._selected:
-                        self._win.bkgdset(curses.color_pair(1))
-                    self._win.insstr(self._groups[g].name.toString())
-                    self._win.bkgdset(curses.color_pair(0))
-                    self._win.insch(' ')
-                    self._win.insch(curses.ACS_LLCORNER)
-                    self._win.insertln()
-                    i += 1
+                    # Display group
+                    if dis_groups > 0:
+                        dis_groups -= 1
+                        if i == y - 2 - (self._selected - skip):
+                            self._win.bkgdset(curses.color_pair(1))
+                        self._win.insstr(self._groups[g].name.toString())
+                        self._win.bkgdset(curses.color_pair(0))
+                        self._win.insch(' ')
+                        self._win.insch(curses.ACS_LLCORNER)
+                        self._win.insertln()
+                        i += 1
             self._win.border()
             self._win.refresh()
             self._modified = False
