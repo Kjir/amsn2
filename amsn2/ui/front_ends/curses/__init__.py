@@ -14,7 +14,7 @@ def load():
 try:
     import imp
 
-    imp.find_module("curses")
+    imp.find_module("urwid")
     aMSNUserInterfaceManager.registerFrontEnd("curses", sys.modules[__name__])
 
 except ImportError:

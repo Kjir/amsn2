@@ -1,5 +1,6 @@
 import curses
 import curses.textpad
+import urwid
 import logging
 from amsn2.core.views import AccountView
 
@@ -56,31 +57,13 @@ class aMSNLoginWindow(object):
     def __init__(self, amsn_core, parent):
         self._amsn_core = amsn_core
         self.switch_to_profile(None)
-        self._stdscr = parent._stdscr
-
-        (y, x) = self._stdscr.getmaxyx()
-        wy = int(y * 0.8)
-        wx = int(x * 0.8)
-        sy = int((y - wy)/2)
-        sx = int((x - wx)/2)
-        self._win = curses.newwin(wy, wx, sy, sx)
+        self._main = parent._main
 
     def show(self):
-        self._win.border()
-        self._win.bkgd(' ', curses.color_pair(1))
-        self._win.addstr(5, 5, "Account : ", curses.A_BOLD)
-        self._username_t = TextBox(self._win, 5, 17, self._username)
-
-        self._win.addstr(8, 5, "Password : ", curses.A_BOLD)
-        self._password_t = PasswordBox(self._win, 8, 17, self._password)
-
-        self._win.refresh()
-
-        self._username_t.edit()
-        self._password_t.edit()
-
-        curses.curs_set(0)
-        self.signin()
+        txt = urwid.Text("Welcome to aMSN2", align='center')
+        self._main.widget = urwid.Filler(txt)
+        self._main.run()
+        #self.signin()
 
     def hide(self):
         self._username_t = None
