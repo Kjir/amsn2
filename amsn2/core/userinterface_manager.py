@@ -66,8 +66,11 @@ class aMSNUserInterfaceManager(object):
         if not self._login:
             self._login = self._ui.aMSNLoginWindow(self._core, self._main)
             self._login.setAccounts(accounts)
-            if len(accounts) > 0 and accounts[0].autologin:
+            if accounts and accounts[0].autologin:
                 self._core.signinToAccount(self._login, accounts[0])
+        else:
+            self._login.signout()
+            self._login.setAccounts(accounts)
 
         self._main.setTitle("aMSN 2 - Login")
 

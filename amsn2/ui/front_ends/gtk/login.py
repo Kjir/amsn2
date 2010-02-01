@@ -279,6 +279,8 @@ class aMSNLoginWindow(gtk.VBox, base.aMSNLoginWindow):
     def setAccounts(self, accountviews):
         self._account_views = accountviews
 
+        self.user.get_children()[0].set_text('')
+        self.password.set_text('')
         for accv in self._account_views:
             self.user.append_text(accv.email)
 

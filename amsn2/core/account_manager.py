@@ -111,10 +111,11 @@ class aMSNAccountManager(object):
         self.accountviews = self._core._backend_manager.loadAccounts()
 
     def getAllAccountViews(self):
+        self.reload()
         return self.accountviews
 
     def getAvailableAccountViews(self):
-        return [v for v in self.accountviews if not self.isAccountLocked(v)]
+        return [v for v in self.getAllAccountViews() if not self.isAccountLocked(v)]
 
     def signinToAccount(self, accountview):
         """

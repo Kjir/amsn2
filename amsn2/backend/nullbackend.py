@@ -29,6 +29,15 @@ class nullbackend(defaultaccountbackend.defaultaccountbackend):
         defaultaccountbackend.defaultaccountbackend.accounts_dir = dir
         defaultaccountbackend.defaultaccountbackend.setAccount(self, email)
 
+    def loadAccounts(self):
+        # We have to create a tmp backend in order to read accounts from the default directory
+        default_account = defaultaccountbackend.defaultaccountbackend()
+
+        # FIXME: This should not be done..
+        # should set the core in the backend __init__, not in the backend manager
+        default_account._core = self._core
+        return default_account.loadAccounts()
+
     def saveConfig(self, account, config):
         # Is it necessary to temporarily save the config?
         pass

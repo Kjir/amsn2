@@ -140,7 +140,8 @@ class aMSNCore(object):
         self._account.client.connect(accountview.email, accountview.password)
 
     def signOutOfAccount(self):
-        self._account.login.signout()
+        accounts = self._account_manager.getAvailableAccountViews()
+        self._ui_manager.loadLogin(accounts)
         self._account.client.logout()
 
     def connectionStateChanged(self, account, state):
