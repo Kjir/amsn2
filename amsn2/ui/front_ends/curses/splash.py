@@ -17,10 +17,10 @@ class aMSNSplashScreen(base.aMSNSplashScreen):
         """ Hide the splashscreen """
         pass
 
-    def setText(self, text):
+    def set_text(self, text):
         """ Shows a different text inside the splashscreen """
         pass
 
-    def setImage(self, image):
+    def set_image(self, image):
         """ Set the image to show in the splashscreen. This is an ImageView object """
         pass

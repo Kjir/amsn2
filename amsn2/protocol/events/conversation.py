@@ -30,19 +30,19 @@ class ConversationEvents(papyon.event.ConversationEventInterface):
         papyon.event.ConversationEventInterface.__init__(self, self._conversation)
 
     def on_conversation_state_changed(self, state):
-        self._amsn_conversation.onStateChanged(state)
+        self._amsn_conversation.on_state_changed(state)
 
     def on_conversation_error(self, type, error):
-        self._amsn_conversation.onError(type, error)
+        self._amsn_conversation.on_error(type, error)
 
     def on_conversation_user_joined(self, contact):
-        self._amsn_conversation.onUserJoined(contact.id)
+        self._amsn_conversation.on_user_joined(contact.id)
 
     def on_conversation_user_left(self, contact):
-        self._amsn_conversation.onUserLeft(contact.id)
+        self._amsn_conversation.on_user_left(contact.id)
 
     def on_conversation_user_typing(self, contact):
-        self._amsn_conversation.onUserTyping(contact.id)
+        self._amsn_conversation.on_user_typing(contact.id)
 
     def on_conversation_message_received(self, sender, message):
         """ Powers of the stringview, here we come! We need to parse the message,
@@ -53,7 +53,7 @@ class ConversationEvents(papyon.event.ConversationEventInterface):
         if message.content in message.msn_objects.keys():
             print "single emoticon"
             strv.appendImage(message.msn_objects[message.content]._location)
-            self._amsn_conversation.onMessageReceived(strv, sender.id)
+            self._amsn_conversation.on_message_received(strv, sender.id)
             return
 
         strlist = [message.content]
@@ -71,12 +71,12 @@ class ConversationEvents(papyon.event.ConversationEventInterface):
 
         for str in strlist:
             if str in message.msn_objects.keys():
-                strv.appendImage(str)
+                strv.append_image(str)
             else:
-                strv.appendText(str)
+                strv.append_text(str)
 
-        self._amsn_conversation.onMessageReceived(strv, sender.id, message.formatting)
+        self._amsn_conversation.on_message_received(strv, sender.id, message.formatting)
 
     def on_conversation_nudge_received(self, sender):
-        self._amsn_conversation.onNudgeReceived(sender.id)
+        self._amsn_conversation.on_nudge_received(sender.id)
 

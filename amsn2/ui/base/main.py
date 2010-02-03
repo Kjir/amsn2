@@ -18,8 +18,9 @@ class aMSNMainWindow(object):
     def hide(self):
         raise NotImplementedError
 
-    def setTitle(self,title):
+    def set_title(self,title):
         raise NotImplementedError
 
-    def setMenu(self,menu):
+    def set_menu(self,menu):
         raise NotImplementedError
+

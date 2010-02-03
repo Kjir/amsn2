@@ -13,7 +13,7 @@ class aMSNLang(object):
     lineRe  = re.compile('\s*([^\s]+)\s+(.+)', re.UNICODE)  # whitespace? + key + whitespace + value
     langRe  = re.compile('(.+)-.+', re.UNICODE)             # code or code-variant
 
-    def loadLang(self, lang_code, force_reload=False):
+    def load_lang(self, lang_code, force_reload=False):
         if self.lang_code is lang_code and force_reload is False:
             # Don't reload the same lang unless forced.
             return
@@ -32,15 +32,15 @@ class aMSNLang(object):
 
         if root is not self.base_lang:
             # If it's not the default lang, load the base first.
-            self.loadLang(self.base_lang)
+            self.load_lang(self.base_lang)
 
         if hasVariant:
             # Then we have a variant, so load the root.
-            self.loadLang(root)
+            self.load_lang(root)
 
         # Load the langfile from each langdir.
         fileWasLoaded = False
-        for dir in self.getLangDirs():
+        for dir in self.get_lang_dirs():
             try:
                 f = file(path.join(dir, 'lang' + lang_code), 'r')
                 fileWasLoaded = True
@@ -52,7 +52,7 @@ class aMSNLang(object):
             while line:
                 if self.lineRe.match(line) is not None:
                     components = self.lineRe.split(line)
-                    self.setKey(unicode(components[1], self.default_encoding), unicode(components[2], self.default_encoding))
+                    self.set_key(unicode(components[1], self.default_encoding), unicode(components[2], self.default_encoding))
 
                 # Get the next line...
                 line = f.readline()
@@ -63,35 +63,35 @@ class aMSNLang(object):
         if fileWasLoaded:
             self.lang_code = lang_code
 
-    def addLangDir(self, lang_dir):
+    def add_lang_dir(self, lang_dir):
         self.lang_dirs.append(str(lang_dir))
-        self.reloadKeys()
+        self.reload_keys()
 
-    def removeLangDir(self, lang_dir):
+    def remove_lang_dir(self, lang_dir):
         try:
             # Remove the lang_dir from the lang_dirs list, and reload keys.
             self.lang_dirs.remove(str(lang_dir))
-            self.reloadKeys()
+            self.reload_keys()
             return True
         except ValueError:
             # Dir not in list.
             return False
 
-    def getLangDirs(self):
+    def get_lang_dirs(self):
         # Return a copy for them to play with.
         return self.lang_dirs[:]
 
-    def clearLangDirs(self):
+    def clear_lang_dirs(self):
         self.lang_dirs = []
-        self.clearKeys()
+        self.clear_keys()
 
-    def reloadKeys(self):
-        self.loadLang(self.lang_code, True)
+    def reload_keys(self):
+        self.load_lang(self.lang_code, True)
 
-    def setKey(self, key, val):
+    def set_key(self, key, val):
         self.lang_keys[key] = val
 
-    def getKey(self, key, replacements=[]):
+    def get_key(self, key, replacements=[]):
         try:
             r = self.lang_keys[key]
         except KeyError:
@@ -112,10 +112,10 @@ class aMSNLang(object):
 
         return r
 
-    def clearKeys(self):
+    def clear_keys(self):
         self.lang_keys = {}
 
-    def printKeys(self):
+    def print_keys(self):
         print self.lang_code
         print '{'
         for key, val in self.lang_keys.iteritems():

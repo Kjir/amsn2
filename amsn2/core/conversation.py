@@ -40,7 +40,7 @@ class aMSNConversation:
         self._contacts_uid = contacts_uid
         if conv is None:
             #New conversation
-            papyon_contacts = [core._contactlist_manager.getContact(uid) for uid in contacts_uid]
+            papyon_contacts = [core._contactlist_manager.get_contact(uid) for uid in contacts_uid]
             papyon_contacts = [c._papyon_contact for c in papyon_contacts if c is not None]
             #if c was None.... wtf?
             self._conv = papyon.Conversation(self._core._account.client, papyon_contacts)
@@ -48,68 +48,68 @@ class aMSNConversation:
             #From an existing conversation
             self._conv = conv
 
-        self._win = self._conversation_manager.getConversationWindow(self)
+        self._win = self._conversation_manager.get_conversation_window(self)
         self._convo_events = conversation.ConversationEvents(self)
-        self._convWidget = core._ui_manager.loadChatWidget(self, self._win, contacts_uid)
-        self._win.addChatWidget(self._convWidget)
+        self._conv_widget = core._ui_manager.load_chat_widget(self, self._win, contacts_uid)
+        self._win.add_chat_widget(self._conv_widget)
         self._win.show()
 
 
     """ events from outside """
-    def onStateChanged(self, state):
+    def on_state_changed(self, state):
         print "state changed"
 
-    def onError(self, type, error):
+    def on_error(self, type, error):
         print error
 
-    def onUserJoined(self, contact_uid):
-        c = self._core._contactlist_manager.getContact(contact_uid)
-        self._convWidget.onUserJoined(c.nickname)
+    def on_user_joined(self, contact_uid):
+        c = self._core._contactlist_manager.get_contact(contact_uid)
+        self._conv_widget.on_user_joined(c.nickname)
 
-    def onUserLeft(self, contact_uid):
-        c = self._core._contactlist_manager.getContact(contact_uid)
-        self._convWidget.onUserLeft(c.nickname)
+    def on_user_left(self, contact_uid):
+        c = self._core._contactlist_manager.get_contact(contact_uid)
+        self._conv_widget.on_user_left(c.nickname)
 
-    def onUserTyping(self, contact_uid):
-        c = self._core._contactlist_manager.getContact(contact_uid)
-        self._convWidget.onUserTyping(c.nickname)
+    def on_user_typing(self, contact_uid):
+        c = self._core._contactlist_manager.get_contact(contact_uid)
+        self._conv_widget.on_user_typing(c.nickname)
 
-    def onMessageReceived(self, message, sender_uid=None, formatting=None):
+    def on_message_received(self, message, sender_uid=None, formatting=None):
         #TODO: messageView
         mv = MessageView()
         if sender_uid is None:
-            mv.sender.appendStringView(self._core._personalinfo_manager._personalinfoview.nick)
+            mv.sender.append_stringview(self._core._personalinfo_manager._personalinfoview.nick)
         else:
-            c = self._core._contactlist_manager.getContact(sender_uid)
+            c = self._core._contactlist_manager.get_contact(sender_uid)
             mv.sender_icon = c.icon
             mv.message_type = MessageView.MESSAGE_OUTGOING
-            mv.sender.appendStringView(c.nickname)
+            mv.sender.append_stringview(c.nickname)
         mv.msg = message
-        self._convWidget.onMessageReceived(mv, formatting)
+        self._conv_widget.on_message_received(mv, formatting)
 
-    def onNudgeReceived(self, sender_uid):
-        self._convWidget.nudge()
+    def on_nudge_received(self, sender_uid):
+        self._conv_widget.nudge()
 
     """ Actions from ourselves """
-    def sendMessage(self, msg, formatting=None):
+    def send_message(self, msg, formatting=None):
         """ msg is a StringView """
         # for the moment, no smiley substitution... (TODO)
-        self.onMessageReceived(msg, formatting=formatting)
+        self.on_message_received(msg, formatting=formatting)
         message = papyon.ConversationMessage(str(msg), formatting)
         self._conv.send_text_message(message)
 
-    def sendNudge(self):
+    def send_nudge(self):
         self._conv.send_nudge()
 
-    def sendTypingNotification(self):
+    def send_typing_notification(self):
         self._conv.send_typing_notification()
 
     def leave(self):
         self._conv.leave()
 
-    def inviteContact(self, contact_uid):
+    def invite_contact(self, contact_uid):
         """ contact_uid is the Id of the contact to invite """
-        c = self._core._contactlist_manager.getContact(contact_uid)
+        c = self._core._contactlist_manager.get_contact(contact_uid)
         self._conv.invite_user(contact.papyon_contact)
 
     #TODO: ...

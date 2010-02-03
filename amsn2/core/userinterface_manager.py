@@ -15,19 +15,19 @@ class aMSNUserInterfaceManager(object):
         self._contactlist = None
 
     @staticmethod
-    def registerFrontEnd(name, module):
+    def register_frontend(name, module):
         aMSNUserInterfaceManager.front_ends[name] = module
 
     @staticmethod
-    def listFrontEnds():
+    def list_frontends():
         return aMSNUserInterfaceManager.front_ends.keys()
 
     @staticmethod
-    def frontEndExists(front_end):
-        return front_end in aMSNUserInterfaceManager.listFrontEnds()
+    def frontend_exists(front_end):
+        return front_end in aMSNUserInterfaceManager.list_frontends()
 
-    def loadUI(self, ui_name):
-        if self.frontEndExists(ui_name):
+    def load_UI(self, ui_name):
+        if self.frontend_exists(ui_name):
             self._ui = self.front_ends[ui_name].load()
 
             self._loop = self._ui.aMSNMainLoop(self)
@@ -38,106 +38,106 @@ class aMSNUserInterfaceManager(object):
 
         else:
             logger.error('Unable to load UI %s. Available front ends are: %s'
-                         % (ui_name, str(self.listFrontEnds())))
+                         % (ui_name, str(self.list_frontends())))
             self._core.quit()
 
-    def getLoop(self):
+    def get_loop(self):
         return self._loop
 
-    def loadSplash(self):
+    def load_splash(self):
         self._splash = self._ui.aMSNSplashScreen(self._core, self._main)
         image = ImageView()
         image.load("Filename","/path/to/image/here")
 
-        self._splash.setImage(image)
-        self._splash.setText("Loading...")
+        self._splash.image = image
+        self._splash.text = "Loading..."
         self._splash.show()
-        self._main.setTitle("aMSN 2 - Loading")
+        self._main.title = "aMSN 2 - Loading"
         return self._splash
 
-    def loadLogin(self, accounts):
+    def load_login(self, accounts):
         if self._splash:
             self._splash.hide()
             self._splash = None
 
         if self._contactlist:
-            self.unloadContactList()
+            self.unload_contactlist()
 
         if not self._login:
             self._login = self._ui.aMSNLoginWindow(self._core, self._main)
-            self._login.setAccounts(accounts)
+            self._login.set_accounts(accounts)
             if accounts and accounts[0].autologin:
-                self._core.signinToAccount(self._login, accounts[0])
+                self._core.signin_to_account(self._login, accounts[0])
         else:
             self._login.signout()
-            self._login.setAccounts(accounts)
+            self._login.set_accounts(accounts)
 
-        self._main.setTitle("aMSN 2 - Login")
+        self._main.title = "aMSN 2 - Login"
 
         self._login.show()
 
-    def unloadLogin(self):
+    def unload_login(self):
         self._login.hide()
         self._login = None
 
-    def loadContactList(self):
+    def load_contactlist(self):
         self._contactlist = self._ui.aMSNContactListWindow(self._core, self._main)
 
         em = self._core._event_manager
-        em.register(em.events.PERSONALINFO_UPDATED, self._contactlist.myInfoUpdated)
+        em.register(em.events.PERSONALINFO_UPDATED, self._contactlist.my_info_updated)
 
-        clwidget = self._contactlist.getContactListWidget()
-        em.register(em.events.CLVIEW_UPDATED, clwidget.contactListUpdated)
-        em.register(em.events.GROUPVIEW_UPDATED, clwidget.groupUpdated)
-        em.register(em.events.CONTACTVIEW_UPDATED, clwidget.contactUpdated)
+        clwidget = self._contactlist.get_contactlist_widget()
+        em.register(em.events.CLVIEW_UPDATED, clwidget.contactlist_updated)
+        em.register(em.events.GROUPVIEW_UPDATED, clwidget.group_updated)
+        em.register(em.events.CONTACTVIEW_UPDATED, clwidget.contact_updated)
 
         if self._login:
-            self.unloadLogin()
+            self.unload_login()
 
-        self._main.setTitle("aMSN 2")
+        self._main.title = "aMSN 2"
         self._contactlist.show()
 
-    def unloadContactList(self):
+    def unload_contactlist(self):
         self._contactlist.hide()
 
         em = self._core._event_manager
-        em.unregister(em.events.PERSONALINFO_UPDATED, self._contactlist.myInfoUpdated)
+        em.unregister(em.events.PERSONALINFO_UPDATED, self._contactlist.my_info_updated)
 
-        clwidget = self._contactlist.getContactListWidget()
-        em.unregister(em.events.CLVIEW_UPDATED, clwidget.contactListUpdated)
-        em.unregister(em.events.GROUPVIEW_UPDATED, clwidget.groupUpdated)
-        em.unregister(em.events.CONTACTVIEW_UPDATED, clwidget.contactUpdated)
+        clwidget = self._contactlist.get_ontactlist_widget()
+        em.unregister(em.events.CLVIEW_UPDATED, clwidget.contactlist_updated)
+        em.unregister(em.events.GROUPVIEW_UPDATED, clwidget.group_updated)
+        em.unregister(em.events.CONTACTVIEW_UPDATED, clwidget.contact_updated)
 
         self._contactlist = None
 
-    def showDialog(self, message, buttons):
+    def show_dialog(self, message, buttons):
         self._ui.aMSNDialogWindow(message, buttons)
 
-    def showNotification(self, message):
+    def show_notification(self, message):
         self._ui.aMSNNotificationWindow(message)
 
-    def showError(self, message):
+    def show_error(self, message):
         self._ui.aMSNErrorWindow(message)
 
-    def loadChatWindow(self, conv_manager):
+    def load_chat_window(self, conv_manager):
         return self._ui.aMSNChatWindow(conv_manager)
 
-    def loadChatWidget(self, conversation, window, cuids):
+    def load_chat_widget(self, conversation, window, cuids):
         return self._ui.aMSNChatWidget(conversation, window, cuids)
 
-    def loadContactInputWindow(self, callback):
+    def load_contact_input_window(self, callback):
         return self._ui.aMSNContactInputWindow(('Contact to add: ', 'Invite message: '),
                                                  callback, ())
 
-    def loadContactDeleteWindow(self, callback):
+    def load_contact_delete_window(self, callback):
         return self._ui.aMSNContactDeleteWindow('Contact to remove: ', callback, ())
 
-    def loadDPChooserWindow(self):
+    def load_DP_chooser_window(self):
         self._ui.aMSNDPChooserWindow(self._core._account.set_dp ,self._core._backend_manager)
 
     # Common methods for all UI
 
-    def getAccountViewFromEmail(self, email):
+    def get_accountview_from_email(self, email):
         """
         Search in the list of accounts and return the view of the given email
 
@@ -150,7 +150,7 @@ class aMSNUserInterfaceManager(object):
         accv = [accv for accv in self._login._account_views if accv.email == email]
 
         if len(accv) == 0:
-            return None
+            return AccountView(self._core, email)
         else:
             return accv[0]
 

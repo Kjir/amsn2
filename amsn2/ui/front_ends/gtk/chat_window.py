@@ -49,7 +49,7 @@ class aMSNChatWindow(base.aMSNChatWindow, gtk.Window):
         self.set_title("aMSN - Chatwindow")
         #leave
 
-    def addChatWidget(self, chat_widget):
+    def add_chat_widget(self, chat_widget):
         print 'addedChatWidget'
         #if self.child is not None: self.remove(self.child)
         #if self.child is not None:
@@ -78,12 +78,12 @@ class aMSNChatWidget(base.aMSNChatWidget, gtk.VBox):
         self.msgstyle = "margin-left:15px"
         self.infostyle = "margin-left:2px; font-style:italic; color:#6d6d6d"
 
-        amsncontacts = [self._contactlist_manager.getContact(uid) for uid in contacts_uid]
+        amsncontacts = [self._contactlist_manager.get_contact(uid) for uid in contacts_uid]
         cviews = [ContactView(self._amsn_core, c) for c in amsncontacts]
         self.chatheader = aMSNChatHeader(self._theme_manager, cviews)
 
         # Titlebar
-        parent.set_title("aMSN2 - " + str(cviews[0].name.getTag("nickname")))
+        parent.set_title("aMSN2 - " + str(cviews[0].name.get_tag("nickname")))
 
         # Middle
         self.textview = HtmlTextView()
@@ -270,8 +270,8 @@ class aMSNChatWidget(base.aMSNChatWidget, gtk.VBox):
             font_family = pango.FontDescription(font_name).get_family()
             format = papyon.TextFormat(font=font_family, color=hex8, style=style)
             strv = StringView()
-            strv.appendText(msg)
-            self._amsn_conversation.sendMessage(strv, format)
+            strv.append_text(msg)
+            self._amsn_conversation.send_message(strv, format)
 
         elif event_keyval == gtk.keysyms.Escape:
             self._parent.destroy()
@@ -283,7 +283,7 @@ class aMSNChatWidget(base.aMSNChatWidget, gtk.VBox):
         buffer.delete(start, end)
 
     def __on_typing_event(self, widget, event):
-        self._amsn_conversation.sendTypingNotification()
+        self._amsn_conversation.send_typing_notification()
 
     def __on_nudge_send(self, widget):
         self.__print_info('Nudge sent')
@@ -315,8 +315,8 @@ class aMSNChatWidget(base.aMSNChatWidget, gtk.VBox):
         self.__set_statusbar_text("")
         return False # To stop gobject timer
 
-    def onMessageReceived(self, messageview, formatting=None):
-        text = messageview.toStringView().toHtmlString()
+    def on_message_received(self, messageview, formatting=None):
+        text = messageview.to_stringview().to_HTML_string()
         text = self.__clean_string(text)
         nick, msg = text.split('\n', 1)
         nick = str(nick.replace('\n', '<br/>'))
@@ -352,18 +352,18 @@ class aMSNChatWidget(base.aMSNChatWidget, gtk.VBox):
         self.last_sender = sender
         self.__typingStopped()
 
-    def onUserJoined(self, contact):
+    def on_user_joined(self, contact):
         print "%s joined the conversation" % (contact,)
         self.__print_info("%s joined the conversation" % (contact,))
         self.__set_statusbar_text("%s joined the conversation" % (contact,))
 
-    def onUserLeft(self, contact):
+    def on_user_left(self, contact):
         print "%s left the conversation" % (contact,)
         self.__print_info("%s left the conversation" % (contact,))
         self.__set_statusbar_text("%s left the conversation" % (contact,))
         self.__typingStopped()
 
-    def onUserTyping(self, contact):
+    def on_user_typing(self, contact):
         """ Set a timer for 6 sec every time a user types. If the user
         continues typing during these 10 sec, kill the timer and start over with
         10 sec. If the user stops typing; call __typingStopped """
@@ -418,9 +418,9 @@ class aMSNChatHeader(gtk.EventBox):
         @type cviews: list of ContactView's
         """
         #FIXME: Show all users in a multiconversation
-        nickname = cviews[0].name.getTag("nickname")
-        psm = cviews[0].name.getTag("psm")
-        status = cviews[0].name.getTag("status")
+        nickname = cviews[0].name.get_tag("nickname")
+        psm = cviews[0].name.get_tag("psm")
+        status = cviews[0].name.get_tag("status")
 
         #FIXME: Which user do we show in a multiconversation?
         img = Image(self.theme_manager, cviews[0].dp)

@@ -65,22 +65,22 @@ class aMSNMainWindow(QMainWindow, base.aMSNMainWindow):
         self.stackedLayout.setCurrentIndex(self.stackedLayout.count()-1)
 
     def __on_show(self):
-        self._amsn_core.mainWindowShown()
+        self._amsn_core.main_window_shown()
 
     def show(self):
         self.setVisible(True)
-        self._amsn_core.idlerAdd(self.__on_show)
+        self._amsn_core.idler_add(self.__on_show)
 
     def hide(self):
         self.setVisible(False)
 
-    def setTitle(self, title):
+    def set_title(self, title):
         self.setWindowTitle(title)
 
     def set_view(self, view):
         print "set_view request"
 
-    def setMenu(self, menu):
+    def set_menu(self, menu):
         mb = QMenuBar()
 
         for item in menu.items:
@@ -90,6 +90,3 @@ class aMSNMainWindow(QMainWindow, base.aMSNMainWindow):
                     menu.addAction(subitem.label)
 
         self.setMenuBar(mb)
-
-    def set_view(self, view):
-        pass

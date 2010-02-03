@@ -211,7 +211,7 @@ class aMSNLoginWindow(gtk.VBox, base.aMSNLoginWindow):
             self._amsn_core.signOutOfAccount()
         else:
             self.accountview = self.__get_account()
-            self._amsn_core.signinToAccount(self, self.accountview)
+            self._amsn_core.signin_to_account(self, self.accountview)
 
     def show(self):
         if self.user.get_active_text() == "":
@@ -228,7 +228,7 @@ class aMSNLoginWindow(gtk.VBox, base.aMSNLoginWindow):
     def __switch_to_account(self, email):
         logger.info("Switching to account %s", email)
 
-        accv = self._ui_manager.getAccountViewFromEmail(email)
+        accv = self._ui_manager.get_accountview_from_email(email)
 
         if accv is None:
             accv = AccountView(self._amsn_core, email)
@@ -276,7 +276,7 @@ class aMSNLoginWindow(gtk.VBox, base.aMSNLoginWindow):
             if self.timer is not None:
                 gobject.source_remove(self.timer)
 
-    def setAccounts(self, accountviews):
+    def set_accounts(self, accountviews):
         self._account_views = accountviews
 
         self.user.get_children()[0].set_text('')
@@ -300,7 +300,7 @@ class aMSNLoginWindow(gtk.VBox, base.aMSNLoginWindow):
             return
 
         email = self.user.get_active_text()
-        accv = self._ui_manager.getAccountViewFromEmail(email)
+        accv = self._ui_manager.get_accountview_from_email(email)
 
         if accv is None:
             accv = AccountView(self._amsn_core, email)
@@ -320,7 +320,7 @@ class aMSNLoginWindow(gtk.VBox, base.aMSNLoginWindow):
     def signin(self):
         self.__show_boxes(True)
 
-    def onConnecting(self, progress, message):
+    def on_connecting(self, progress, message):
         self.status.set_text(message)
         self.pgbar.set_fraction(progress)
 
@@ -340,7 +340,7 @@ class aMSNLoginWindow(gtk.VBox, base.aMSNLoginWindow):
     def __on_toggled_cb(self, source):
 
         email = self.user.get_active_text()
-        accv = self._ui_manager.getAccountViewFromEmail(email)
+        accv = self._ui_manager.get_accountview_from_email(email)
 
         if accv is None:
             accv = AccountView(self._amsn_core, email)

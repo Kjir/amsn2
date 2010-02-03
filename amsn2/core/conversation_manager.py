@@ -11,14 +11,14 @@ class aMSNConversationManager:
         self._convs = []
         self._wins = []
 
-    def onInviteConversation(self, conversation):
+    def on_invite_conversation(self, conversation):
         print "new conv"
         contacts_uid = [c.id for c in conversation.participants]
         #TODO: What if the contact_manager has not build a view for that contact?
         c = aMSNConversation(self._core, self, conversation, contacts_uid)
         self._convs.append(c)
 
-    def newConversation(self, contacts_uid):
+    def new_conversation(self, contacts_uid):
         """ contacts_uid is a list of contact uid """
         #TODO: check if no conversation like this one already exists
         c = aMSNConversation(self._core, self, None, contacts_uid)
@@ -26,11 +26,11 @@ class aMSNConversationManager:
 
 
 
-    def getConversationWindow(self, amsn_conversation):
+    def get_conversation_window(self, amsn_conversation):
         #TODO:
         #contacts should be a list of contact view
         # for the moment, always create a new win
-        win = self._core._ui_manager.loadChatWindow(self)
+        win = self._core._ui_manager.load_chat_window(self)
         self._wins.append(win)
         return win
 

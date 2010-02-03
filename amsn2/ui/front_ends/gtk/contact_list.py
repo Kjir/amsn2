@@ -127,7 +127,7 @@ class aMSNContactListWindow(base.aMSNContactListWindow, gtk.VBox):
         self.status.pack_start(txtCell, False)
         self.status.add_attribute(iconCell, 'pixbuf',0)
         self.status.add_attribute(txtCell, 'markup',1)
-        self.status.connect('changed', self.onStatusChanged)
+        self.status.connect('changed', self.on_status_changed)
 
     def __create_box(self):
         frameDisplay = gtk.Frame()
@@ -237,7 +237,7 @@ class aMSNContactListWindow(base.aMSNContactListWindow, gtk.VBox):
         parentWidget.add(entry)
         entry.show()
         parentWidget.set_relief(gtk.RELIEF_NONE)        # remove cool elevated effect
-        
+
     def __onDisplayClicked(self, source):
         self._myview.changeDP()
 
@@ -247,16 +247,16 @@ class aMSNContactListWindow(base.aMSNContactListWindow, gtk.VBox):
     def hide(self):
         pass
 
-    def setTitle(self, text):
+    def set_title(self, text):
         self._main_win.set_title(text)
 
-    def setMenu(self, menu):
+    def set_menu(self, menu):
         """ This will allow the core to change the current window's main menu
         @type menu: MenuView
         """
         pass
 
-    def myInfoUpdated(self, view):
+    def my_info_updated(self, view):
         """ This will allow the core to change pieces of information about
         ourself, such as DP, nick, psm, the current media being played,...
         @type view: PersonalInfoView
@@ -276,7 +276,7 @@ class aMSNContactListWindow(base.aMSNContactListWindow, gtk.VBox):
             pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(imview.imgs[0][1], 64, 64)
             self.display.set_from_pixbuf(pixbuf)
 
-    def onStatusChanged(self, combobox):
+    def on_status_changed(self, combobox):
         status = combobox.get_active()
         for key in self.status_values:
             if self.status_values[key] == status:
@@ -284,7 +284,7 @@ class aMSNContactListWindow(base.aMSNContactListWindow, gtk.VBox):
         if key != self._myview.presence:
             self._myview.presence = key
 
-    def getContactListWidget(self):
+    def get_contactlist_widget(self):
         return self._clwidget
 
 class aMSNContactListWidget(base.aMSNContactListWidget, gtk.TreeView):
@@ -394,7 +394,7 @@ class aMSNContactListWidget(base.aMSNContactListWidget, gtk.TreeView):
     def hide(self):
         pass
 
-    def contactListUpdated(self, clview):
+    def contactlist_updated(self, clview):
         guids = self.groups
         self.groups = []
 
@@ -412,7 +412,7 @@ class aMSNContactListWidget(base.aMSNContactListWidget, gtk.TreeView):
                 self._model.remove(giter)
                 self.groups.remove(gid)
 
-    def groupUpdated(self, groupview):
+    def group_updated(self, groupview):
         if (groupview.uid == 0): groupview.uid = '0'
         if groupview.uid not in self.groups:
             logger.error('Group iter %s not found!' %(contactview.uid))
@@ -441,7 +441,7 @@ class aMSNContactListWidget(base.aMSNContactListWidget, gtk.TreeView):
                 citer = [c for c in citers if self._model.is_ancestor(giter, c)]
                 self._model.remove(citer[0])
 
-    def contactUpdated(self, contactview):
+    def contact_updated(self, contactview):
         """
         @type contactview: ContactView
         """

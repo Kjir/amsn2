@@ -12,12 +12,12 @@ class MessageView:
 
     #TODO: toMessageStyle or sthg like that
 
-    def toStringView(self):
+    def to_stringview(self):
         strv = StringView()
-        strv.appendStringView(self.sender)
-        strv.appendText(" says:\n")
-        strv.appendStringView(self.msg)
-        strv.appendText("\n")
+        strv.append_stringview(self.sender)
+        strv.append_text(" says:\n")
+        strv.append_stringview(self.msg)
+        strv.append_text("\n")
 
         return strv
 

@@ -60,16 +60,13 @@ class aMSNContactListWindow(base.aMSNContactListWindow):
     def hide(self):
         self._clwidget.hide()
 
-    def setTitle(self, text):
+    def set_title(self, text):
         self._parent.setTitle(text)
 
-    def setMenu(self, menu):
+    def set_menu(self, menu):
         self._parent.setMenu(menu)
 
-    def topCLUpdated(self, contactView):
-        pass #TODO
-
-    def myInfoUpdated(self, view):
+    def my_info_updated(self, view):
         # TODO image, ...
         self._myview = view
         nk = view.nick
@@ -79,7 +76,7 @@ class aMSNContactListWindow(base.aMSNContactListWindow):
         # TODO Add a combobox like the gtk ui?
         #self.ui.statusCombo.currentIndex(self.status_values[view.presence])
 
-    def getContactListWidget(self):
+    def get_contactlist_widget(self):
         return self._clwidget
 
 class itemDelegate(QStyledItemDelegate):
@@ -184,7 +181,7 @@ class aMSNContactListWidget(StyledWidget, base.aMSNContactListWidget):
 
         return None
 
-    def contactListUpdated(self, view):
+    def contactlist_updated(self, view):
         guids = self.groups
         self.groups = []
 
@@ -194,7 +191,7 @@ class aMSNContactListWidget(StyledWidget, base.aMSNContactListWidget):
             if gid not in guids:
                 self.groups.append(gid)
                 self._model.appendRow([QStandardItem(gid), QStandardItem(gid), QStandardItem("group"), QStandardItem()])
-        
+
         # Remove unused groups
         for gid in guids:
             if gid not in self.groups:
@@ -202,7 +199,7 @@ class aMSNContactListWidget(StyledWidget, base.aMSNContactListWidget):
                 self._model.removeRow((self._model.indexFromItem(gitem)).row())
                 self.groups.remove(gid)
 
-    def contactUpdated(self, contact):
+    def contact_updated(self, contact):
         
         citem = self.__search_by_id(contact.uid)
         if citem is None: return
@@ -222,7 +219,7 @@ class aMSNContactListWidget(StyledWidget, base.aMSNContactListWidget):
         cname = contact.name.toHtmlString()
         gitem.child(self._model.indexFromItem(citem).row(), 0).setText(QString.fromUtf8(cname))
 
-    def groupUpdated(self, group):
+    def group_updated(self, group):
         if (group.uid == 0): group.uid = '0'
         if group.uid not in self.groups: return
         
@@ -249,7 +246,7 @@ class aMSNContactListWidget(StyledWidget, base.aMSNContactListWidget):
                 citem = self.__search_by_id(cid)
                 self._model.removeRow((self._model.indexFromItem(citem)).row())
 
-    def groupRemoved(self, group):
+    def group_removed(self, group):
         gid = self.__search_by_id(group.uid)
         self._model.takeRow(self._model.indexFromItem(gid))
 
@@ -277,11 +274,11 @@ class aMSNContactListWidget(StyledWidget, base.aMSNContactListWidget):
         else:
             print "Doble click on group!"
 
-    def setContactContextMenu(self, cb):
+    def set_contact_context_menu(self, cb):
         #TODO:
         pass
 
-    def groupAdded(self, group):
+    def group_added(self, group):
         pi = self._model.invisibleRootItem()
 
         # Adding Group Item

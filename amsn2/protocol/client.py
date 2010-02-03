@@ -32,8 +32,8 @@ class Client(papyon.Client):
     def __init__(self, amsn_core, account):
         self._amsn_account = account
         self._amsn_core = amsn_core
-        server = (self._amsn_account.config.getKey("ns_server", "messenger.hotmail.com"),
-                  self._amsn_account.config.getKey("ns_port", 1863))
+        server = (self._amsn_account.config.get_key("ns_server", "messenger.hotmail.com"),
+                  self._amsn_account.config.get_key("ns_port", 1863))
         papyon.Client.__init__(self, server)
 
         self._client_events_handler = ClientEvents(self, self._amsn_core)
@@ -47,8 +47,8 @@ class Client(papyon.Client):
     def connect(self, email, password):
         self.login(email, password)
 
-    def changeNick(self, nick):
+    def change_nick(self, nick):
         self.profile.display_name = str(nick)
 
-    def changeMessage(self, message):
+    def change_message(self, message):
         self.profile.personal_message = str(message)

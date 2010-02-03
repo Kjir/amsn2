@@ -13,12 +13,12 @@ class aMSNChatWindow(window.aMSNWindow, base.aMSNChatWindow):
         self._conversation_manager = conversation_manager
         window.aMSNWindow.__init__(self, conversation_manager._core)
         self._container = aMSNChatWidgetContainer()
-        self.setTitle(TITLE + " - Chatwindow")
+        self.set_title(TITLE + " - Chatwindow")
         self.resize(CW_WIDTH, CW_HEIGHT)
 
         self.autodel_set(True)
 
-    def addChatWidget(self, chat_widget):
+    def add_chat_widget(self, chat_widget):
         self.resize_object_add(chat_widget)
         chat_widget.show()
         print chat_widget.ine.geometry
@@ -133,24 +133,24 @@ class aMSNChatWidget(elementary.Box, base.aMSNChatWidget):
         bb.show()
 
         strv = StringView()
-        strv.appendText(msg)
-        self._amsn_conversation.sendMessage(strv)
+        strv.append_text(msg)
+        self._amsn_conversation.send_message(strv)
 
     def __sendButton_cb(button, entry):
         str = entry.entry_get()
         entry.entry_set("")
         self.__sendMsg(msg)
 
-    def onUserJoined(self, contact):
+    def on_user_joined(self, contact):
         print "%s joined the conversation" % (contact,)
 
-    def onUserLeft(self, contact):
+    def on_user_left(self, contact):
         print "%s left the conversation" % (contact,)
 
-    def onUserTyping(self, contact):
+    def on_user_typing(self, contact):
         print "%s is typing" % (contact,)
 
-    def onMessageReceived(self, messageview, formatting=None):
+    def on_message_received(self, messageview, formatting=None):
         print "MSG RECEIVED"
         bb = elementary.Bubble(self.parent)
         bb.label_set("TODO: CONTACT")

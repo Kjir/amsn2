@@ -5,22 +5,22 @@ class basebackend():
     It contains the functions that should be available for every backend.
     """
 
-    def saveConfig(self, amsn_account, config):
+    def save_config(self, amsn_account, config):
         raise NotImplementedError
 
-    def loadConfig(self, amsn_account):
+    def load_config(self, amsn_account):
         raise NotImplementedError
 
-    def loadAccount(self, email):
+    def load_account(self, email):
         raise NotImplementedError
 
-    def loadAccounts(self):
+    def load_accounts(self):
         raise NotImplementedError
 
-    def saveAccount(self, amsn_account):
+    def save_account(self, amsn_account):
         raise NotImplementedError
 
-    def setAccount(self, email):
+    def set_account(self, email):
         raise NotImplementedError
 
     def clean(self):
@@ -32,8 +32,8 @@ class basebackend():
 
 
     """ DPs """
-    def getFileLocationDP(self, email, uid, shaci):
+    def get_file_location_DP(self, email, uid, shaci):
         raise NotImplementedError
 
-    def getDPs(self, email):
+    def get_DPs(self, email):
         raise NotImplementedError

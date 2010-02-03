@@ -13,7 +13,7 @@ class aMSNMainWindow(base.aMSNMainWindow):
                 ('bg', 'light gray', 'black'),
                 ('label', 'yellow', 'light gray')]
         self._main = urwid.MainLoop(None, palette, unhandled_input=self.__handle_commands)
-        self._amsn_core.idlerAdd(self.__on_show)
+        self._amsn_core.idler_add(self.__on_show)
 
     def hide(self):
         raise urwid.ExitMainLoop()
@@ -23,12 +23,12 @@ class aMSNMainWindow(base.aMSNMainWindow):
         curses.endwin()
 
     def __on_show(self):
-        self._amsn_core.mainWindowShown()
+        self._amsn_core.main_window_shown()
 
-    def setTitle(self,title):
+    def set_title(self,title):
         self._title = title
 
-    def setMenu(self,menu):
+    def set_menu(self,menu):
         pass
 
     def setFocusedWindow(self, window):

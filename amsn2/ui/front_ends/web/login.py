@@ -29,7 +29,7 @@ class aMSNLoginWindow(object):
         self.current_profile.username = self._username
         self.current_profile.email = self._username
         self.current_profile.password = self._password
-        self._amsn_core.signinToAccount(self, self.current_profile)
+        self._amsn_core.signin_to_account(self, self.current_profile)
 
-    def onConnecting(self,mess):
+    def on_connecting(self,mess):
         self._main.send("onConnecting",[mess])

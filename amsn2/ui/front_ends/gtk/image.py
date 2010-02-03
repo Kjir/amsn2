@@ -39,14 +39,14 @@ class Image(gtk.Image):
         i = 0
         for (resource_type, value) in view.imgs:
             try:
-                loadMethod = getattr(self, "_loadFrom%s" % resource_type)
+                loadMethod = getattr(self, "_load_from_%s" % resource_type)
             except AttributeError, e:
                 logger.error("Unable to find the method to load %s image from %s" % (value, resource_type))
             else:
                 loadMethod(value, view, i)
                 i += 1
 
-    def _loadFromFilename(self, filename, view, index):
+    def _load_from_Filename(self, filename, view, index):
         # TODO: Implement support for emblems and other embedded images
         if (index != 0): return
 
@@ -56,14 +56,14 @@ class Image(gtk.Image):
         except Exception, e:
             logger.error("Error loading image %s" % filename)
 
-    def _loadFromTheme(self, resource_name, view, index):
+    def _load_from_Theme(self, resource_name, view, index):
         # TODO: Implement support for emblems and other embedded images
         if (index != 0): return
 
         _, filename = self._theme_manager.get_value(resource_name)
 
         if filename is not None:
-            self._loadFromFilename(filename, view, index)
+            self._load_from_Filename(filename, view, index)
         else:
             logger.error('Error loading image %s from theme' %resource_name)
 

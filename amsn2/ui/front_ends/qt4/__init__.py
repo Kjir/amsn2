@@ -28,7 +28,10 @@ def load():
     try:
         import qt4
         return qt4
-    except ImportError:
+    except ImportError, e:
+        etype, value, tb = sys.exc_info()
+        traceback.print_exception(etype, value, tb.tb_next)
+        return None
         return None
 
 # Initialize the front end by checking for any
@@ -37,6 +40,6 @@ try:
     import imp
     imp.find_module("PyQt4")
 
-    aMSNUserInterfaceManager.registerFrontEnd("qt4", sys.modules[__name__])
+    aMSNUserInterfaceManager.register_frontend("qt4", sys.modules[__name__])
 except ImportError:
     pass

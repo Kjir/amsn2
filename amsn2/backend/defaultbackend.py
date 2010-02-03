@@ -20,7 +20,7 @@ class defaultbackend(defaultaccountbackend.defaultaccountbackend):
     def __init__(self):
         defaultaccountbackend.defaultaccountbackend.__init__(self)
 
-    def saveConfig(self, account, config):
+    def save_config(self, account, config):
         #TODO: improve
         root_section = Element("aMSNConfig")
         for e in config._config:
@@ -30,18 +30,18 @@ class defaultbackend(defaultaccountbackend.defaultaccountbackend):
                               name=str(e))
             elmt.text = str(val)
 
-        accpath = os.path.join(self.accounts_dir, self._getDir(account.view.email),
+        accpath = os.path.join(self.accounts_dir, self._get_dir(account.view.email),
                                "config.xml")
         xml_tree = ElementTree(root_section)
         xml_tree.write(accpath, encoding='utf-8')
 
-    def loadConfig(self, account):
+    def load_config(self, account):
         c = aMSNConfig()
-        c.setKey("ns_server", "messenger.hotmail.com")
-        c.setKey("ns_port", 1863)
+        c.set_key("ns_server", "messenger.hotmail.com")
+        c.set_key("ns_port", 1863)
 
         configpath = os.path.join(self.accounts_dir,
-                                  self._getDir(account.view.email),
+                                  self._get_dir(account.view.email),
                                   "config.xml")
         try:
             configfile = file(configpath, "r")
@@ -55,9 +55,9 @@ class defaultbackend(defaultaccountbackend.defaultaccountbackend):
             lst = config.findall("entry")
             for elmt in lst:
                 if elmt.attrib['type'] == 'int':
-                    c.setKey(elmt.attrib['name'], int(elmt.text))
+                    c.set_key(elmt.attrib['name'], int(elmt.text))
                 else:
-                    c.setKey(elmt.attrib['name'], elmt.text)
+                    c.set_key(elmt.attrib['name'], elmt.text)
         return c
 
     def clean(self):

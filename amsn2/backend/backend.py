@@ -3,16 +3,16 @@ class aMSNBackendManager(object):
     def __init__(self, core):
         self._backend = None
         self._core = core
-        self.switchToBackend('nullbackend')
+        self.switch_to_backend('nullbackend')
 
-    def setBackendForFunc(self, funcname, backend):
+    def set_backend_for_func(self, funcname, backend):
         try:
             f = getattr(backend, funcname)
             self.__setattr__(funcname, f)
         except AttributeError:
-            self.__setattr__(funcname, self.__missingFunc)
+            self.__setattr__(funcname, self.__missing_func)
 
-    def switchToBackend(self, backend):
+    def switch_to_backend(self, backend):
         try:
             m = __import__(backend, globals(), locals(), [], -1)
         except ImportError:
@@ -26,19 +26,19 @@ class aMSNBackendManager(object):
         self.current_backend = backend
 
         # Config management methods
-        self.setBackendForFunc('saveConfig', self._backend)
-        self.setBackendForFunc('loadConfig', self._backend)
+        self.set_backend_for_func('save_config', self._backend)
+        self.set_backend_for_func('load_config', self._backend)
 
         # Account management methods
-        self.setBackendForFunc('loadAccount', self._backend)
-        self.setBackendForFunc('loadAccounts', self._backend)
-        self.setBackendForFunc('saveAccount', self._backend)
-        self.setBackendForFunc('setAccount', self._backend)
-        self.setBackendForFunc('removeAccount', self._backend)
-        self.setBackendForFunc('clean', self._backend)
+        self.set_backend_for_func('load_account', self._backend)
+        self.set_backend_for_func('load_accounts', self._backend)
+        self.set_backend_for_func('save_account', self._backend)
+        self.set_backend_for_func('set_account', self._backend)
+        self.set_backend_for_func('remove_account', self._backend)
+        self.set_backend_for_func('clean', self._backend)
 
         # DP
-        self.setBackendForFunc('getFileLocationDP', self._backend)
+        self.set_backend_for_func('get_file_location_DP', self._backend)
 
         # Logs management methods
         # MSNObjects cache methods (Smileys, DPs, ...)
@@ -46,7 +46,7 @@ class aMSNBackendManager(object):
         # Files received
         # ...
 
-    def __missingFunc(*args):
+    def __missing_func(*args):
         print 'Function missing for %s' % self.current_backend
 
 

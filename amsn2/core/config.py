@@ -5,7 +5,7 @@ class aMSNConfig:
     def __init__(self):
         self._config = {}
 
-    def getKey(self, key, default = None):
+    def get_key(self, key, default = None):
         """
         Get a existing config key or a default value in any other case.
 
@@ -22,7 +22,7 @@ class aMSNConfig:
         except KeyError:
             return default
 
-    def setKey(self, key, value):
+    def set_key(self, key, value):
         """
         Set a key value
 

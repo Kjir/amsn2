@@ -10,7 +10,7 @@ images {
 
 
 group {
-  name: "login_screen";
+  name: "amsn2/login_screen";
 
 
   script {

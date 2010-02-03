@@ -31,9 +31,9 @@ class defaultaccountbackend(basebackend.basebackend):
         except :
             pass
 
-    def loadAccount(self, email):
+    def load_account(self, email):
         accview = None
-        self.createAccountFileTree(email)
+        self.create_account_file_tree(email)
         accpath = os.path.join(self.account_dir, "account.xml")
         accfile = file(accpath, "r")
         root_tree = ElementTree(file=accfile)
@@ -50,14 +50,14 @@ class defaultaccountbackend(basebackend.basebackend):
             if nickElmt is None:
                 return None
             if nickElmt.text:
-                accview.nick.appendText(nickElmt.text)
+                accview.nick.append_text(nickElmt.text)
             #TODO: parse...
             #psm
             psmElmt = account.find("psm")
             if psmElmt is None:
                 return None
             if psmElmt.text:
-                accview.psm.appendText(psmElmt.text)
+                accview.psm.append_text(psmElmt.text)
             #presence
             presenceElmt = account.find("presence")
             if presenceElmt is None:
@@ -92,35 +92,35 @@ class defaultaccountbackend(basebackend.basebackend):
 
         return accview
 
-    def loadAccounts(self):
+    def load_accounts(self):
         account_dirs = []
         for root, dirs, files in os.walk(self.accounts_dir):
             account_dirs = dirs
             break
         accountviews = []
         for account_dir in account_dirs:
-            accv = self.loadAccount(os.path.join(self.accounts_dir, account_dir))
+            accv = self.load_account(os.path.join(self.accounts_dir, account_dir))
             if accv:
                 accountviews.append(accv)
         return accountviews
 
-    def createAccountFileTree(self, email):
-        self.account_dir = os.path.join(self.accounts_dir, self._getDir(email))
+    def create_account_file_tree(self, email):
+        self.account_dir = os.path.join(self.accounts_dir, self._get_dir(email))
         if not os.path.isdir(self.account_dir):
                 os.makedirs(self.account_dir, 0700)
         self.dps_dir = os.path.join(self.account_dir, "displaypics")
         if not os.path.isdir(self.dps_dir):
                 os.makedirs(self.dps_dir, 0700)
 
-    def setAccount(self, email):
-        self.createAccountFileTree(email)
+    def set_account(self, email):
+        self.create_account_file_tree(email)
 
-    def saveAccount(self, amsn_account):
+    def save_account(self, amsn_account):
         if amsn_account.view is None or amsn_account.view.email is None:
             return false
 
-        self.createAccountFileTree(amsn_account.view.email)
-        amsn_account.backend_manager.saveConfig(amsn_account, amsn_account.config)
+        self.create_account_file_tree(amsn_account.view.email)
+        amsn_account.backend_manager.save_config(amsn_account, amsn_account.config)
         #TODO: integrate with personnalinfo
         root_section = Element("aMSNAccount")
         #email
@@ -160,8 +160,8 @@ class defaultaccountbackend(basebackend.basebackend):
         xml_tree = ElementTree(root_section)
         xml_tree.write(accpath, encoding='utf-8')
 
-    def removeAccount(self, email):
-        accdir = os.path.join(self.accounts_dir, self._getDir(email))
+    def remove_account(self, email):
+        accdir = os.path.join(self.accounts_dir, self._get_dir(email))
         if os.path.isdir(accdir):
             for [root, subdirs, subfiles] in os.walk(accdir, False):
                 for subfile in subfiles:
@@ -171,16 +171,16 @@ class defaultaccountbackend(basebackend.basebackend):
             os.rmdir(accdir)
 
 
-    def getFileLocationDP(self, email, uid, shac):
-        """ 
+    def get_file_location_DP(self, email, uid, shac):
+        """
         Get location of display picture. A SHA sum is included in the filename,
         this is converted to hex.
         @return: string with filename.
         """
-        dir = os.path.join(self.dps_dir, self._getDir(email))
+        dir = os.path.join(self.dps_dir, self._get_dir(email))
         if not os.path.isdir(dir):
             os.makedirs(dir, 0700)
         return os.path.join(dir, shac.encode("hex")+".img")
 
-    def _getDir(self, email):
+    def _get_dir(self, email):
         return email.lower().strip().replace("@","_at_")

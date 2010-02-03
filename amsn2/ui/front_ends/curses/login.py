@@ -81,10 +81,10 @@ class aMSNLoginWindow(object):
     def signin(self):
         self.current_profile.email = self._username_t.value()
         self.current_profile.password = self._password_t.value()
-        self._amsn_core.signinToAccount(self, self.current_profile)
+        self._amsn_core.signin_to_account(self, self.current_profile)
 
 
-    def onConnecting(self, progress, message):
+    def on_connecting(self, progress, message):
         self._username_t = None
         self._password_t = None
         self._win.clear()
@@ -92,7 +92,7 @@ class aMSNLoginWindow(object):
         self._win.addstr(10, 25, message, curses.A_BOLD | curses.A_STANDOUT)
         self._win.refresh()
 
-    def setAccounts(self, account_views):
+    def set_accounts(self, account_views):
         self.accounts = account_views
         #TODO: add autologin stuff, account selection
         if len(self.accounts) == 0:

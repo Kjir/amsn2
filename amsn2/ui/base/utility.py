@@ -42,7 +42,7 @@ class aMSNDialogWindow(object):
         """
         raise NotImplementedError
 
-class aMSNContactInputWindow(object): 
+class aMSNContactInputWindow(object):
     """
     This Interface represent a window used to get a new contact.
     """
@@ -59,7 +59,7 @@ class aMSNContactInputWindow(object):
         """
         raise notImplementedError
 
-class aMSNGroupInputWindow(object): 
+class aMSNGroupInputWindow(object):
     """
     This Interface represent a window used to get a new group.
     """
@@ -75,7 +75,7 @@ class aMSNGroupInputWindow(object):
         """
         raise notImplementedError
 
-class aMSNContactDeleteWindow(object): 
+class aMSNContactDeleteWindow(object):
     """
     This Interface represent a window used to delete a contact.
     """
@@ -91,7 +91,7 @@ class aMSNContactDeleteWindow(object):
         """
         raise notImplementedError
 
-class aMSNGroupDeleteWindow(object): 
+class aMSNGroupDeleteWindow(object):
     """
     This Interface represent a window used to delete a group.
     """

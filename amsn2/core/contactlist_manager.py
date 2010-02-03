@@ -20,11 +20,11 @@ class aMSNContactListManager:
 
     ''' normal changes of a contact '''
 
-    def onContactChanged(self, papyon_contact):
+    def on_contact_changed(self, papyon_contact):
         """ Called when a contact changes either its presence, nick, psm or current media."""
 
         #1st/ update the aMSNContact object
-        c = self.getContact(papyon_contact.id, papyon_contact)
+        c = self.get_contact(papyon_contact.id, papyon_contact)
         c.fill(papyon_contact)
         #2nd/ update the ContactView
         cv = ContactView(self._core, c)
@@ -32,11 +32,11 @@ class aMSNContactListManager:
 
         #TODO: update the group view
 
-    def onContactDPChanged(self, papyon_contact):
+    def on_contact_DP_changed(self, papyon_contact):
         """ Called when a contact changes its Display Picture. """
 
         #Request the DP...
-        c = self.getContact(papyon_contact.id, papyon_contact)
+        c = self.get_contact(papyon_contact.id, papyon_contact)
         if ("Theme", "dp_nopic") in c.dp.imgs:
             c.dp.load("Theme", "dp_loading")
         elif papyon_contact.msn_object is None:
@@ -49,16 +49,16 @@ class aMSNContactListManager:
         if (papyon_contact.presence is not papyon.Presence.OFFLINE and
             papyon_contact.msn_object):
             self._core._account.client.msn_object_store.request(papyon_contact.msn_object,
-                                                                (self.onDPdownloaded,
+                                                                (self.on_DP_downloaded,
                                                                  papyon_contact.id))
 
-    def onDPdownloaded(self, msn_object, uid):
+    def on_DP_downloaded(self, msn_object, uid):
         #1st/ update the aMSNContact object
         try:
-            c = self.getContact(uid)
+            c = self.get_contact(uid)
         except ValueError:
             return
-        fn = self._core._backend_manager.getFileLocationDP(c.account, uid,
+        fn = self._core._backend_manager.get_file_location_DP(c.account, uid,
                                                            msn_object._data_sha)
         try:
             f = open(fn, 'w+b', 0700)
@@ -78,69 +78,69 @@ class aMSNContactListManager:
 
 # actions from user: accept/decline contact invitation - block/unblock contact - add/remove/rename group - add/remove contact to/from group
 
-    def addContact(self):
+    def add_contact(self):
         def cb(email, invite_msg):
             if email:
                 self._papyon_addressbook.add_messenger_contact(email, self._core._account.view.email,
                                                                invite_msg)
-        self._core._ui_manager.loadContactInputWindow(cb)
+        self._core._ui_manager.load_contact_input_window(cb)
 
-    def onContactAdded(self, contact):
-        c = self.getContact(contact.id, contact)
-        gids = [ g.id for g in self.getGroups(contact.id)]
-        self._addContactToGroups(contact.id, gids)
-        self._core._ui_manager.showNotification("Contact %s added!" % contact.account)
+    def on_contact_added(self, contact):
+        c = self.get_contact(contact.id, contact)
+        gids = [ g.id for g in self.get_groups(contact.id)]
+        self._add_contact_to_groups(contact.id, gids)
+        self._core._ui_manager.show_notification("Contact %s added!" % contact.account)
 
-    def removeContact(self):
-        def contactCB(account):
+    def remove_contact(self):
+        def contact_cb(account):
             if account:
                 try:
                     papyon_contact = self._papyon_addressbook.\
                                           contacts.search_by('account', account)[0]
                 except IndexError:
-                    self._core._ui_manager.showError('You don\'t have the %s contact!', account)
+                    self._core._ui_manager.show_error('You don\'t have the %s contact!', account)
                     return
 
-                self.removeContactUid(papyon_contact.id)
+                self.remove_contact_Uid(papyon_contact.id)
 
-        self._core._ui_manager.loadContactDeleteWindow(contactCB)
+        self._core._ui_manager.load_contact_delete_window(contact_cb)
 
-    def removeContactUid(self, uid):
+    def remove_contact_Uid(self, uid):
         papyon_contact = self._papyon_addressbook.contacts.search_by('id', uid)[0]
         def cb_ok():
             self._papyon_addressbook.delete_contact(papyon_contact)
 
-        self._core._ui_manager.showDialog('Are you sure you want to remove the contact %s?'
+        self._core._ui_manager.show_dialog('Are you sure you want to remove the contact %s?'
                                           % papyon_contact.account,
                                           (('OK', cb_ok), ('Cancel', lambda : '')))
 
-    def onContactRemoved(self, contact):
-        self._removeContactFromGroups(contact.id)
+    def on_contact_removed(self, contact):
+        self._remove_contact_from_groups(contact.id)
         del self._contacts[contact.id]
-        self._core._ui_manager.showNotification("Contact %s removed!" % contact.account)
+        self._core._ui_manager.show_notification("Contact %s removed!" % contact.account)
 
     ''' additional methods '''
 
     # used when a contact is deleted, moved or change status to offline
-    def _removeContactFromGroups(self, cid):
-        groups = self.getGroups(cid)
+    def _remove_contact_from_groups(self, cid):
+        groups = self.get_groups(cid)
         for g in groups:
             g.contacts.remove(cid)
             gv = GroupView(self._core, g.id, g.name, g.contacts)
             self._em.emit(self._em.events.GROUPVIEW_UPDATED, gv)
 
-    def _addContactToGroups(self, cid, gids):
+    def _add_contact_to_groups(self, cid, gids):
         for gid in gids:
-            g = self.getGroup(gid)
+            g = self.get_group(gid)
             g.contacts.add(cid)
             gv = GroupView(self._core, g.id, g.name, g.contacts)
             self._em.emit(self._em.events.GROUPVIEW_UPDATED, gv)
 
-        c = self.getContact(cid)
+        c = self.get_contact(cid)
         cv = ContactView(self._core, c)
         self._em.emit(self._em.events.CONTACTVIEW_UPDATED, cv)
 
-    def onCLDownloaded(self, address_book):
+    def on_CL_downloaded(self, address_book):
         self._papyon_addressbook = address_book
         grpviews = []
         cviews = []
@@ -150,7 +150,7 @@ class aMSNContactListManager:
             contacts = address_book.contacts.search_by_groups(group)
 
             for contact in contacts:
-                c = self.getContact(contact.id, contact)
+                c = self.get_contact(contact.id, contact)
                 cv = ContactView(self._core, c)
                 cviews.append(cv)
 
@@ -159,13 +159,13 @@ class aMSNContactListManager:
             grpviews.append(gv)
             clv.group_ids.append(group.id)
 
-            self.getGroup(group.id, group)
+            self.get_group(group.id, group)
 
         contacts = address_book.contacts.search_by_memberships(papyon.Membership.FORWARD)
         no_group_ids= []
         for contact in contacts:
             if len(contact.groups) == 0:
-                c = self.getContact(contact.id, contact)
+                c = self.get_contact(contact.id, contact)
                 cv = ContactView(self._core, c)
                 cviews.append(cv)
                 no_group_ids.append(contact.id)
@@ -174,7 +174,7 @@ class aMSNContactListManager:
             gv = GroupView(self._core, 0, "NoGroup", no_group_ids)
             grpviews.append(gv)
             clv.group_ids.append(0)
-            self.getGroup(0, None, no_group_ids)
+            self.get_group(0, None, no_group_ids)
 
         #Emit the events
         self._em.emit(self._em.events.CLVIEW_UPDATED, clv)
@@ -183,7 +183,7 @@ class aMSNContactListManager:
         for c in cviews:
             self._em.emit(self._em.events.CONTACTVIEW_UPDATED, c)
 
-    def getContact(self, uid, papyon_contact=None):
+    def get_contact(self, uid, papyon_contact=None):
         """
         @param uid: uid of the contact
         @type uid: str
@@ -204,7 +204,7 @@ class aMSNContactListManager:
             else:
                 raise ValueError
 
-    def getGroup(self, gid, papyon_group = None, cids=[]):
+    def get_group(self, gid, papyon_group = None, cids=[]):
         """
         @param gid: uid of the group
         @type gid: str
@@ -227,9 +227,9 @@ class aMSNContactListManager:
             else:
                 raise ValueError
 
-    def getGroups(self, uid):
+    def get_groups(self, uid):
         # propagate a ValueError
-        return [self.getGroup(gid) for gid in self.getContact(uid).groups]
+        return [self.get_group(gid) for gid in self.get_contact(uid).groups]
 
 
 """ A few things used to describe a contact
@@ -278,17 +278,17 @@ class aMSNContact():
         self.emblem.load("Theme", "emblem_" + self._core.p2s[papyon_contact.presence])
         #TODO: PARSE ONLY ONCE
         self.nickname.reset()
-        self.nickname.appendText(papyon_contact.display_name)
+        self.nickname.append_text(papyon_contact.display_name)
         self.personal_message.reset()
-        self.personal_message.appendText(papyon_contact.personal_message)
+        self.personal_message.append_text(papyon_contact.personal_message)
         self.current_media.reset()
-        self.current_media.appendText(papyon_contact.current_media)
+        self.current_media.append_text(papyon_contact.current_media)
         self.status.reset()
-        self.status.appendText(self._core.p2s[papyon_contact.presence])
+        self.status.append_text(self._core.p2s[papyon_contact.presence])
 
         #DP:
         if papyon_contact.msn_object:
-            fn = self._core._backend_manager.getFileLocationDP(
+            fn = self._core._backend_manager.get_file_location_DP(
                     papyon_contact.account,
                     papyon_contact.id,
                     papyon_contact.msn_object._data_sha)

@@ -6,10 +6,10 @@ class Skin(base.Skin):
         self._path = path
         pass
 
-    def getKey(self, key, default):
+    def get_key(self, key, default):
         pass
 
-    def setKey(self, key, value):
+    def set_key(self, key, value):
         pass
 
 
@@ -19,8 +19,8 @@ class SkinManager(base.SkinManager):
         self._core = core
         self.skin = Skin(core, "skins")
 
-    def setSkin(self, name):
+    def set_skin(self, name):
         self.skin = Skin(self._core, os.path.join("skins", name))
 
-    def listSkins(self, path):
+    def get_skins(self, path):
         pass

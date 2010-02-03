@@ -29,7 +29,7 @@ class aMSNAccount(object):
         self.lock()
         self.load()
 
-    def signOut(self):
+    def sign_out(self):
         if self.do_save:
             self.save()
         self.backend_manager.clean()
@@ -45,13 +45,13 @@ class aMSNAccount(object):
 
     def load(self):
         #TODO:
-        self.config = self.backend_manager.loadConfig(self)
+        self.config = self.backend_manager.load_config(self)
 
     def save(self):
         self.view.nick = self.personalinfoview.nick
         self.view.psm = self.personalinfoview.psm
         self.view.dp = self.personalinfoview.dp
-        self.backend_manager.saveAccount(self)
+        self.backend_manager.save_account(self)
 
     def set_dp(self, path):
         if path:
@@ -61,7 +61,7 @@ class aMSNAccount(object):
 
                 # Write the file and rename it instead of creating a tmpfile
                 profile = self.client.profile
-                dp_path_tmp = self.backend_manager.getFileLocationDP(self.view.email, profile.id, 'tmp')
+                dp_path_tmp = self.backend_manager.get_file_location_DP(self.view.email, profile.id, 'tmp')
                 im.save(dp_path_tmp, "PNG")
                 f = open(dp_path_tmp)
                 dp_object = papyon.p2p.MSNObject(self.client.profile,
@@ -72,7 +72,7 @@ class aMSNAccount(object):
                                                  data=f)
                 f.close()
 
-                dp_path = self.backend_manager.getFileLocationDP(self.view.email, profile.id, dp_object._data_sha)
+                dp_path = self.backend_manager.get_file_location_DP(self.view.email, profile.id, dp_object._data_sha)
                 os.rename(dp_path_tmp, dp_path)
 
             except OSError, e:
@@ -108,16 +108,16 @@ class aMSNAccountManager(object):
             self.accountviews.insert(0, pv)
 
     def reload(self):
-        self.accountviews = self._core._backend_manager.loadAccounts()
+        self.accountviews = self._core._backend_manager.load_accounts()
 
-    def getAllAccountViews(self):
+    def get_all_accountviews(self):
         self.reload()
         return self.accountviews
 
-    def getAvailableAccountViews(self):
-        return [v for v in self.getAllAccountViews() if not self.isAccountLocked(v)]
+    def get_available_accountviews(self):
+        return [v for v in self.get_all_accountviews() if not self.is_account_locked(v)]
 
-    def signinToAccount(self, accountview):
+    def signin_to_account(self, accountview):
         """
         @type accountview: AccountView
         @rtype: aMSNAccount
@@ -126,17 +126,17 @@ class aMSNAccountManager(object):
         acc = aMSNAccount(self._core, accountview)
 
         if accountview.save:
-            self._core._backend_manager.switchToBackend(accountview.preferred_backend)
-            acc.backend_manager.saveAccount(acc)
+            self._core._backend_manager.switch_to_backend(accountview.preferred_backend)
+            acc.backend_manager.save_account(acc)
         else:
-            self._core._backend_manager.removeAccount(accountview.email)
-            self._core._backend_manager.switchToBackend('nullbackend')
-        acc.backend_manager.setAccount(accountview.email)
+            self._core._backend_manager.remove_account(accountview.email)
+            self._core._backend_manager.switch_to_backend('nullbackend')
+        acc.backend_manager.set_account(accountview.email)
 
         acc.lock()
         return acc
 
-    def isAccountLocked(self, accountview):
+    def is_account_locked(self, accountview):
         """
         @type accountview: AccountView
         @rtype: bool

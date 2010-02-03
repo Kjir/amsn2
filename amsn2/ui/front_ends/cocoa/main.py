@@ -32,4 +32,4 @@ class aMSNMainWindow(base.aMSNMainWindow):
         self.cocoaWin.orderFront_(self.cocoaWin)
 
     def __on_show(self):
-        self._amsn_core.mainWindowShown()
+        self._amsn_core.main_window_shown()

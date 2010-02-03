@@ -14,14 +14,14 @@ class aMSNWindow(object):
         print "aMSNWindow.hide"
         pass
 
-    def setTitle(self, text):
+    def set_title(self, text):
         """ This will allow the core to change the current window's title
         @text : a string
         """
         print "aMSNWindow.setTitle"
         pass
 
-    def setMenu(self, menu):
+    def set_menu(self, menu):
         """ This will allow the core to change the current window's main menu
         @menu : a MenuView
         """

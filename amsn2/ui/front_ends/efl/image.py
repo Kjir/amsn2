@@ -31,7 +31,7 @@ class Image(evas.SmartObject):
             self._imgs.append(self._evas.Image())
             self.member_add(self._imgs[-1])
             try:
-                loadMethod = getattr(self, "_loadFrom%s" % resource_type)
+                loadMethod = getattr(self, "_load_from_%s" % resource_type)
             except AttributeError, e:
                 print "From load in efl/image.py:\n\t(resource_type, value) = (%s, %s)\n\tAttributeError: %s" % (resource_type, value, e)
             else:
@@ -40,40 +40,40 @@ class Image(evas.SmartObject):
 
 
 
-    def _loadFromFilename(self, filename, pos=0, view=None, i=0):
+    def _load_from_Filename(self, filename, pos=0, view=None, i=0):
         try:
             self._imgs[pos].file_set(filename)
         except evas.EvasLoadError, e:
             print "EvasLoadError: %s" % (e,)
 
-    def _loadFromEET(self, (eetfile, key), pos=0, view=None, i=0):
+    def _load_from_EET(self, (eetfile, key), pos=0, view=None, i=0):
         try:
             self._imgs[pos].file_set(eetfile, key)
         except evas.EvasLoadError, e:
             print "EvasLoadError: %s" % (e,)
 
-    def _loadFromFileObject(self, fileobject, pos=0, view=None, i=0):
+    def _load_from_FileObject(self, fileobject, pos=0, view=None, i=0):
         (fno, tf) = tempfile.mkstemp()
         f = os.fdopen(fno, 'w+b')
         f.write(fileobject.read())
         f.close()
         if view is not None:
             view.imgs[i] = ("Filename", tf)
-        self._loadFromFilename(tf, pos, view, i)
+        self._load_from_Filename(tf, pos, view, i)
 
 
-    def _loadFromTheme(self, resource_name, pos=0, view=None, i=0):
-        res = self._skin.getKey(resource_name)
+    def _load_from_Theme(self, resource_name, pos=0, view=None, i=0):
+        res = self._skin.get_key(resource_name)
         if res is not None:
             (type, value) = res
             try:
-                loadMethod = getattr(self, "_loadFrom%s" % type)
+                loadMethod = getattr(self, "_load_from_%s" % type)
             except AttributeError, e:
-                print "From _loadFromSkin in efl/image.py:\n\t(type, value) = (%s, %s)\n\tAttributeError: %s" % (type, value, e)
+                print "From _load_from_Theme in efl/image.py:\n\t(type, value) = (%s, %s)\n\tAttributeError: %s" % (type, value, e)
             else:
                 loadMethod(value, pos, view, i)
 
-    def _loadFromNone(self, r, pos=0):
+    def _load_from_None(self, r, pos=0):
         pass
 
     #######################################################

@@ -13,7 +13,7 @@ class aMSNLoginWindow(object):
         """ Hide the login window """
         raise NotImplementedError
 
-    def setAccounts(self, accountviews):
+    def set_accounts(self, accountviews):
         """ This method will be called when the core needs the login window to
         let the user select among some accounts.
 
@@ -32,7 +32,7 @@ class aMSNLoginWindow(object):
         This is intended only to change the look of the login window. """
         raise NotImplementedError
 
-    def onConnecting(self, progress, message):
+    def on_connecting(self, progress, message):
         """ This method will be called to notify the UI that we are connecting.
 
         @type progress: float

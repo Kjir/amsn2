@@ -38,10 +38,10 @@ class StringView (object):
             self._type = type
             self._value = value
 
-        def getType(self):
+        def get_type(self):
             return self._type
 
-        def getValue(self):
+        def get_value(self):
             return self._value
 
     class ColorElement(StringElement):
@@ -83,100 +83,94 @@ class StringView (object):
         self._default_font = default_font
 
         if default_color is not None:
-            self.resetColor()
+            self.reset_color()
         if default_background_color is not None:
-            self.resetBackgroundColor()
+            self.reset_background_color()
         if default_font is not None:
-            self.resetFont()
+            self.reset_font()
 
     def append(self, type, value):
         self._elements.append(StringView.StringElement(type, value))
 
-    def appendStringView(self, strv):
+    def append_stringview(self, strv):
         #TODO: default (bg)color
         self._elements.extend(strv._elements)
-    def appendText(self, text):
+    def append_text(self, text):
         self._elements.append(StringView.TextElement(text))
-    def appendImage(self, image):
+    def append_image(self, image):
         self._elements.append(StringView.ImageElement(image))
-    def setColor(self, color):
+    def set_color(self, color):
         self._elements.append(StringView.ColorElement(color))
-    def setBackgroundColor(self, color):
+    def set_background_color(self, color):
         self._elements.append(StringView.BackgroundColorElement(color))
-    def setFont(self, font):
+    def set_font(self, font):
         self._elements.append(StringView.FontElement(font))
-    def openTag(self, tag):
+    def open_tag(self, tag):
         self._elements.append(StringView.OpenTagElement(tag))
-    def closeTag(self, tag):
+    def close_tag(self, tag):
         self._elements.append(StringView.CloseTagElement(tag))
 
-    def setBold(self):
+    def set_bold(self):
         self._elements.append(StringView.BoldElement(True))
-    def unsetBold(self):
+    def unset_bold(self):
         self._elements.append(StringView.BoldElement(False))
-    def setItalic(self):
+    def set_italic(self):
         self._elements.append(StringView.ItalicElement(True))
-    def unsetItalic(self):
+    def unset_italic(self):
         self._elements.append(StringView.ItalicElement(False))
-    def setUnderline(self):
+    def set_underline(self):
         self._elements.append(StringView.UnderlineElement(True))
-    def unsetUnderline(self):
+    def unset_underline(self):
         self._elements.append(StringView.UnderlineElement(False))
 
     def reset(self):
         self._elements = []
-    def resetColor(self):
-        self.setColor(self._default_color)
-    def resetBackgroundColor(self):
-        self.setBackgroundColor(self._default_background_color)
-    def resetFont(self):
-        self.setFont(self._default_font)
+    def reset_color(self):
+        self.set_color(self._default_color)
+    def reset_background_color(self):
+        self.set_background_color(self._default_background_color)
+    def reset_font(self):
+        self.set_font(self._default_font)
 
 
-    def appendElementsFromHtml(self, string):
+    def append_elements_from_HTML(self, string):
         """ This method should parse an HTML string and convert it to a
         StringView. It will be extremely comfortable, since most of the
         times our frontends will work with HTML stuff. """
         # TODO: Not so easy... maybe there is a python HTML parser we can use?
         pass
 
-    def toHtmlString(self):
+    def to_HTML_string(self):
         """ This method returns a formatted html string with all
         the data in the stringview """
         out = ""
         for x in self._elements:
-            if x.getType() == StringView.TEXT_ELEMENT:
-                print "Plain text found"
-                out += x.getValue()
-            elif x.getType() == StringView.ITALIC_ELEMENT:
-                print "Italic text found"
-                if x.getValue() == True:
+            if x.get_type() == StringView.TEXT_ELEMENT:
+                out += x.get_value()
+            elif x.get_type() == StringView.ITALIC_ELEMENT:
+                if x.get_value() == True:
                     out += "<i>"
                 else:
                     out += "</i>"
-            elif x.getType() == StringView.BOLD_ELEMENT:
-                print "Bold text found"
-                if x.getValue() == True:
+            elif x.get_type() == StringView.BOLD_ELEMENT:
+                if x.get_value() == True:
                     out += "<b>"
                 else:
                     out += "</b>"
-            elif x.getType() == StringView.IMAGE_ELEMENT:
-                print "Image found"
-                out += "<img src=\""+x.getValue()+"\" />"
-            elif x.getType() == StringView.UNDERLINE_ELEMENT:
-                if x.getValue() == True:
+            elif x.get_type() == StringView.IMAGE_ELEMENT:
+                out += "<img src=\""+x.get_value()+"\" />"
+            elif x.get_type() == StringView.UNDERLINE_ELEMENT:
+                if x.get_value() == True:
                     out += "<u>"
                 else:
                     out += "</u>"
-
-        print out
         return out
 
-    def getTag(self, tagname):
+    def get_tag(self, tagname):
 
         for i in range(len(self._elements)):
             e = self._elements[i]
-            if e.getType() == StringView.OPEN_TAG_ELEMENT and e.getValue() == tagname:
+            if e.get_type() == StringView.OPEN_TAG_ELEMENT and e.get_value() == tagname:
                 begin = i+1
                 break
 
@@ -186,8 +180,8 @@ class StringView (object):
         if begin is not None:
             e = self._elements[begin]
 
-            while not (e.getType() == StringView.CLOSE_TAG_ELEMENT and e.getValue() == tagname):
-                sv.append(e.getType(), e.getValue())
+            while not (e.get_type() == StringView.CLOSE_TAG_ELEMENT and e.get_value() == tagname):
+                sv.append(e.get_type(), e.get_value())
                 begin += 1
                 e = self._elements[begin]
 
@@ -196,14 +190,14 @@ class StringView (object):
     def __str__(self):
         out = ""
         for x in self._elements:
-            if x.getType() == StringView.TEXT_ELEMENT:
-                out += x.getValue()
+            if x.get_type() == StringView.TEXT_ELEMENT:
+                out += x.get_value()
         return out
 
     def __repr__(self):
         out = "{"
         for x in self._elements:
-            out += "[" + x.getType() + "=" + str(x.getValue()) + "]"
+            out += "[" + x.get_type() + "=" + str(x.get_value()) + "]"
 
         out += "}"
         return out

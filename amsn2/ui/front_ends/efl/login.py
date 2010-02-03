@@ -10,17 +10,17 @@ from amsn2.core.views import accountview
 
 #TODO: del?
 class aMSNLoginWindow(elementary.Layout, base.aMSNLoginWindow):
-    def __init__(self, amsn_core, parent):
+    def __init__(self, amsn_core, win):
         self._core = amsn_core
-        self._evas = parent._evas
-        self._parent = parent
+        self._evas = win._evas
+        self._win = win
         self._account_views = []
         self._ui_manager = self._core._ui_manager
 
         edje.frametime_set(1.0 / 30)
 
-        elementary.Layout.__init__(self, parent)
-        self.file_set(THEME_FILE, "login_screen")
+        elementary.Layout.__init__(self, win)
+        self.file_set(THEME_FILE, "amsn2/login_screen")
 
         self._edje = self.edje_get()
 
@@ -59,7 +59,7 @@ class aMSNLoginWindow(elementary.Layout, base.aMSNLoginWindow):
         sc.show()
 
         self.presence = elementary.Hoversel(self)
-        self.presence.hover_parent_set(self._parent)
+        self.presence.hover_parent_set(self._win)
         for key in self._core.p2s:
             name = self._core.p2s[key]
             _, path = self._core._theme_manager.get_statusicon("buddy_%s" % name)
@@ -137,10 +137,10 @@ class aMSNLoginWindow(elementary.Layout, base.aMSNLoginWindow):
         else:
            self._edje.signal_callback_add("signin", "*", self.__signin_cb)
 
-        self._parent.set_child(self)
+        self._win.child = self
         self.show()
 
-    def setAccounts(self, accountviews):
+    def set_accounts(self, accountviews):
         #TODO: support more than just 1 account...
         self._account_views = accountviews
         if accountviews:
@@ -189,7 +189,7 @@ class aMSNLoginWindow(elementary.Layout, base.aMSNLoginWindow):
     def signout(self):
         pass
 
-    def onConnecting(self, progress, message):
+    def on_connecting(self, progress, message):
         self._edje.signal_emit("connecting", "")
         msg1 = ""
         msg2 = ""
@@ -207,16 +207,16 @@ class aMSNLoginWindow(elementary.Layout, base.aMSNLoginWindow):
 
 
     def __signin_cb(self, edje_obj, signal, source):
-        self._core.signinToAccount(self, self.__get_account())
+        self._core.signin_to_account(self, self.__get_account())
 
     def __signin_button_cb(self, bt):
-        self._core.signinToAccount(self, self.__get_account())
+        self._core.signin_to_account(self, self.__get_account())
 
     def __get_account(self):
         email = elementary.Entry.markup_to_utf8(self.username.entry_get()).strip()
         password = elementary.Entry.markup_to_utf8(self.password.entry_get()).strip()
 
-        accv = self._ui_manager.getAccountViewFromEmail(email)
+        accv = self._ui_manager.get_accountview_from_email(email)
         accv.password = password
 
         accv.presence = self.presence_key

@@ -6,7 +6,12 @@ import sys
 # We need to import the front end module and return it
 # so the guimanager can access its classes
 def load():
-    import cocoa
+    try:
+        import cocoa
+    except ImportError, e:
+        etype, value, tb = sys.exc_info()
+        traceback.print_exception(etype, value, tb.tb_next)
+        return None
     return cocoa
 
 # Initialize the front end by checking for any
@@ -17,7 +22,7 @@ try:
     imp.find_module('Foundation')
     imp.find_module('AppKit')
 
-    aMSNUserInterfaceManager.registerFrontEnd("cocoa", sys.modules[__name__])
+    aMSNUserInterfaceManager.register_frontend("cocoa", sys.modules[__name__])
 
 except ImportError:
     pass

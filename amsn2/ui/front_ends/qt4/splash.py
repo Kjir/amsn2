@@ -39,11 +39,11 @@ class aMSNSplashScreen(QSplashScreen, base.aMSNSplashScreen):
         self.setVisible(False)
         qApp.processEvents()
 
-    def setText(self, text):
+    def set_text(self, text):
         self.showMessage(text)
         qApp.processEvents()
 
-    def setImage(self, image):
+    def set_image(self, image):
         img = Image(self._theme_manager, image)
         self.setPixmap(img)
         qApp.processEvents()

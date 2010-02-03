@@ -3,7 +3,7 @@ images {
 }
 
 group {
-  name: "personal_info";
+  name: "amsn2/personal_info";
   parts {
     part {
       name: "dp_border";

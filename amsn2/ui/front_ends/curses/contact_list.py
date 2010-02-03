@@ -61,7 +61,7 @@ class aMSNContactListWidget(base.aMSNContactListWidget):
         self.__repaint()
 
 
-    def contactListUpdated(self, clView):
+    def contactlist_updated(self, clView):
         # Acquire the lock to do modifications
         with self._mod_lock:
             # TODO: Implement it to sort groups
@@ -77,7 +77,7 @@ class aMSNContactListWidget(base.aMSNContactListWidget):
             # Notify waiting threads that we modified something
             self._mod_lock.notify()
 
-    def groupUpdated(self, gView):
+    def group_updated(self, gView):
         # Acquire the lock to do modifications
         with self._mod_lock:
             if self._groups.has_key(gView.uid):
@@ -103,7 +103,7 @@ class aMSNContactListWidget(base.aMSNContactListWidget):
                 # Notify waiting threads that we modified something
                 self._mod_lock.notify()
 
-    def contactUpdated(self, cView):
+    def contact_updated(self, cView):
         # Acquire the lock to do modifications
         with self._mod_lock:
             if self._contacts.has_key(cView.uid):

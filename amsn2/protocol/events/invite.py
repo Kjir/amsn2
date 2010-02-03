@@ -10,4 +10,4 @@ class InviteEvents(papyon.event.InviteEventInterface):
         papyon.event.InviteEventInterface.__init__(self, client)
 
     def on_invite_conversation(self, conversation):
-        self._amsn_core._conversation_manager.onInviteConversation(conversation)
+        self._amsn_core._conversation_manager.on_invite_conversation(conversation)

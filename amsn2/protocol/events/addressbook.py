@@ -28,10 +28,10 @@ class AddressBookEvents(papyon.event.AddressBookEventInterface):
         papyon.event.AddressBookEventInterface.__init__(self, client)
 
     def on_addressbook_messenger_contact_added(self, contact):
-        self._contactlist_manager.onContactAdded(contact)
+        self._contactlist_manager.on_contact_added(contact)
 
     def on_addressbook_contact_deleted(self, contact):
-        self._contactlist_manager.onContactRemoved(contact)
+        self._contactlist_manager.on_contact_removed(contact)
 
     def on_addressbook_contact_blocked(self, contact):
         pass

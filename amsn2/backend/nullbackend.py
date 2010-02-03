@@ -23,26 +23,26 @@ class nullbackend(defaultaccountbackend.defaultaccountbackend):
         defaultaccountbackend.defaultaccountbackend.__init__(self)
         self.config_dir = None
 
-    def setAccount(self, email):
+    def set_account(self, email):
         dir = tempfile.mkdtemp()
         self.accounts_dir = dir
         defaultaccountbackend.defaultaccountbackend.accounts_dir = dir
-        defaultaccountbackend.defaultaccountbackend.setAccount(self, email)
+        defaultaccountbackend.defaultaccountbackend.set_account(self, email)
 
-    def loadAccounts(self):
+    def load_accounts(self):
         # We have to create a tmp backend in order to read accounts from the default directory
         default_account = defaultaccountbackend.defaultaccountbackend()
 
         # FIXME: This should not be done..
         # should set the core in the backend __init__, not in the backend manager
         default_account._core = self._core
-        return default_account.loadAccounts()
+        return default_account.load_accounts()
 
-    def saveConfig(self, account, config):
+    def save_config(self, account, config):
         # Is it necessary to temporarily save the config?
         pass
 
-    def loadConfig(self, account):
+    def load_config(self, account):
         c = aMSNConfig()
         c._config = {"ns_server":'messenger.hotmail.com',
                        "ns_port":1863,

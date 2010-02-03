@@ -13,7 +13,7 @@ class aMSNMainLoop(object):
         """ This will run the the main loop"""
         raise NotImplementedError
 
-    def idlerAdd(self, func):
+    def idler_add(self, func):
         """
         This will add an idler function into the main loop's idler
 
@@ -21,7 +21,7 @@ class aMSNMainLoop(object):
         """
         raise NotImplementedError
 
-    def timerAdd(self, delay, func):
+    def timer_add(self, delay, func):
         """
         This will add a timer into the main loop which will call a function
 

@@ -9,11 +9,11 @@ import traceback
 def load():
     try:
         import efl
-        return efl
     except ImportError, e:
         etype, value, tb = sys.exc_info()
         traceback.print_exception(etype, value, tb.tb_next)
         return None
+    return efl
 
 
 # Initialize the front end by checking for any
@@ -25,7 +25,7 @@ try:
     imp.find_module("ecore")
     imp.find_module("elementary")
 
-    aMSNUserInterfaceManager.registerFrontEnd("efl", sys.modules[__name__])
+    aMSNUserInterfaceManager.register_frontend("efl", sys.modules[__name__])
 
 except ImportError:
     pass

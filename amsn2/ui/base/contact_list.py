@@ -23,19 +23,19 @@ class aMSNContactListWindow(object):
         """ Hide the contact list window """
         raise NotImplementedError
 
-    def setTitle(self, text):
+    def set_title(self, text):
         """ This will allow the core to change the current window's title
         @type text: str
         """
         raise NotImplementedError
 
-    def setMenu(self, menu):
+    def set_menu(self, menu):
         """ This will allow the core to change the current window's main menu
         @type menu: MenuView
         """
         raise NotImplementedError
 
-    def myInfoUpdated(self, view):
+    def my_info_updated(self, view):
         """ This will allow the core to change pieces of information about
         ourself, such as DP, nick, psm, the current media being played,...
         @type view: PersonalInfoView
@@ -43,7 +43,7 @@ class aMSNContactListWindow(object):
         currentMedia,...)"""
         raise NotImplementedError
 
-    def getContactListWidget(self):
+    def get_contactlist_widget(self):
         """This will allow the core to access the widget"""
         raise NotImplementedError
 
@@ -61,7 +61,7 @@ class aMSNContactListWidget(object):
         """ Hide the contact list widget """
         raise NotImplementedError
 
-    def contactListUpdated(self, clView):
+    def contactlist_updated(self, clView):
         """ This method will be called when the core wants to notify
         the contact list of the groups that it contains, and where they
         should be drawn a group should be drawn.
@@ -75,7 +75,7 @@ class aMSNContactListWidget(object):
         for all the contacts to show in the group."""
         raise NotImplementedError
 
-    def groupUpdated(self, groupView):
+    def group_updated(self, groupView):
         """ This method will be called to notify the contact list
         that a group has been updated.
         The contact list should update its icon and name
@@ -85,7 +85,7 @@ class aMSNContactListWidget(object):
         """
         raise NotImplementedError
 
-    def contactUpdated(self, contactView):
+    def contact_updated(self, contactView):
         """ This method will be called to notify the contact list
         that a contact has been updated.
         The contact can be in any group drawn and his icon,

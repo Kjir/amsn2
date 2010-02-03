@@ -5,7 +5,7 @@ class aMSNChatWindow(object):
     def __init__(self, amsn_core):
         raise NotImplementedError
 
-    def addChatWidget(self, chat_widget):
+    def add_chat_widget(self, chat_widget):
         """ add an aMSNChatWidget to the window """
         raise NotImplementedError
 
@@ -20,7 +20,7 @@ class aMSNChatWidget(object):
         it."""
         raise NotImplementedError
 
-    def onMessageReceived(self, messageview):
+    def on_message_received(self, messageview):
         """ Called for incoming and outgoing messages
             message: a MessageView of the message"""
         raise NotImplementedError

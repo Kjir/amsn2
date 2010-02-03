@@ -31,50 +31,50 @@ class Skin(base.Skin):
         self._dict = {}
         #TODO : remove, it's just here for test purpose
         #TODO : explain a bit :D
-        self.setKey("buddy_online", ("Filename", os.path.join("amsn2",
+        self.set_key("buddy_online", ("Filename", os.path.join("amsn2",
             "themes", "default", "images", "online.png")))
-        #self.setKey("emblem_online", ("Filename", "amsn2/themes/default/images/contact_list/plain_emblem.png"))
+        #self.set_key("emblem_online", ("Filename", "amsn2/themes/default/images/contact_list/plain_emblem.png"))
 
-        self.setKey("buddy_away", ("Filename", os.path.join("amsn2",
+        self.set_key("buddy_away", ("Filename", os.path.join("amsn2",
             "themes", "default", "images", "away.png")))
 
-        #self.setKey("emblem_away", ("Filename", "amsn2/themes/default/images/contact_list/away_emblem.png"))
-        self.setKey("buddy_brb", ("Filename", os.path.join("amsn2",
+        #self.set_key("emblem_away", ("Filename", "amsn2/themes/default/images/contact_list/away_emblem.png"))
+        self.set_key("buddy_brb", ("Filename", os.path.join("amsn2",
             "themes", "default", "images", "away.png")))
-        #self.setKey("emblem_brb", ("Filename", "amsn2/themes/default/images/contact_list/away_emblem.png"))
-        self.setKey("buddy_idle", ("Filename", os.path.join("amsn2",
+        #self.set_key("emblem_brb", ("Filename", "amsn2/themes/default/images/contact_list/away_emblem.png"))
+        self.set_key("buddy_idle", ("Filename", os.path.join("amsn2",
             "themes", "default", "images", "away.png")))
-        #self.setKey("emblem_idle", ("Filename", "amsn2/themes/default/images/contact_list/away_emblem.png"))
-        self.setKey("buddy_lunch", ("Filename", os.path.join("amsn2",
+        #self.set_key("emblem_idle", ("Filename", "amsn2/themes/default/images/contact_list/away_emblem.png"))
+        self.set_key("buddy_lunch", ("Filename", os.path.join("amsn2",
             "themes", "default", "images", "away.png")))
-        #self.setKey("emblem_lunch", ("Filename", "amsn2/themes/default/images/contact_list/away_emblem.png"))
+        #self.set_key("emblem_lunch", ("Filename", "amsn2/themes/default/images/contact_list/away_emblem.png"))
 
         # Just to show you can use an image from the edj file
-        self.setKey("buddy_busy", ("Filename", os.path.join("amsn2",
+        self.set_key("buddy_busy", ("Filename", os.path.join("amsn2",
             "themes", "default", "images","busy.png")))
-        #self.setKey("emblem_busy", ("Filename", "amsn2/themes/default/images/contact_list/busy_emblem.png"))
-        self.setKey("buddy_phone", ("Filename", os.path.join("amsn2",
+        #self.set_key("emblem_busy", ("Filename", "amsn2/themes/default/images/contact_list/busy_emblem.png"))
+        self.set_key("buddy_phone", ("Filename", os.path.join("amsn2",
             "themes", "default", "images", "busy.png")))
-        #self.setKey("emblem_phone", ("Filename", "amsn2/themes/default/images/contact_list/busy_emblem.png"))
+        #self.set_key("emblem_phone", ("Filename", "amsn2/themes/default/images/contact_list/busy_emblem.png"))
 
-        self.setKey("buddy_offline", ("Filename", os.path.join("amsn2",
+        self.set_key("buddy_offline", ("Filename", os.path.join("amsn2",
             "themes", "default", "images", "offline.png")))
 
-        #self.setKey("emblem_offline", ("Filename", "amsn2/themes/default/images/contact_list/offline_emblem.png"))
-        self.setKey("buddy_hidden", ("Filename", os.path.join("amsn2",
+        #self.set_key("emblem_offline", ("Filename", "amsn2/themes/default/images/contact_list/offline_emblem.png"))
+        self.set_key("buddy_hidden", ("Filename", os.path.join("amsn2",
             "themes", "default", "images", "offline.png")))
-        #self.setKey("emblem_hidden", ("Filename", "amsn2/themes/default/images/contact_list/offline_emblem.png"))
+        #self.set_key("emblem_hidden", ("Filename", "amsn2/themes/default/images/contact_list/offline_emblem.png"))
 
-        self.setKey("default_dp", ("Filename", os.path.join("amsn2", "themes",
+        self.set_key("default_dp", ("Filename", os.path.join("amsn2", "themes",
             "default", "images", "contact_list", "nopic.png")))
 
-    def getKey(self, key, default=None):
+    def get_key(self, key, default=None):
         try:
             return self._dict[key]
         except KeyError:
             return default
 
-    def setKey(self, key, value):
+    def set_key(self, key, value):
         self._dict[key] = value
 
 
@@ -83,8 +83,8 @@ class SkinManager(base.SkinManager):
         self._core = core
         self.skin = Skin(core, "skins")
 
-    def setSkin(self, name):
+    def set_skin(self, name):
         self.skin = Skin(self._core, os.path.join("skins", name))
 
-    def listSkins(self, path):
+    def get_skins(self, path):
         pass

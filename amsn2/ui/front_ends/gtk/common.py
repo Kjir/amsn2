@@ -28,7 +28,7 @@ def escape_pango(str):
     str = str.replace('\n',' ')
     return str
 
-def createMenuItemsFromView(menu, items):
+def create_menu_items_from_view(menu, items):
     # TODO: images & radio groups, for now only basic representation
     for item in items:
         if item.type is MenuItemView.COMMAND:
@@ -39,7 +39,7 @@ def createMenuItemsFromView(menu, items):
         elif item.type is MenuItemView.CASCADE_MENU:
             men = gtk.Menu()
             it = gtk.MenuItem(item.label)
-            createMenuItemsFromView(men, item.items)
+            create_menu_items_from_view(men, item.items)
             it.set_submenu(men)
             it.show()
             menu.append(it)

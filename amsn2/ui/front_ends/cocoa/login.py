@@ -46,7 +46,7 @@ class aMSNLoginWindow(object):
         self.current_profile.username = self._username
         self.current_profile.email = self._username
         self.current_profile.password = self._password
-        self.amsn_core.signinToAccount(self, self.current_profile)
+        self.amsn_core.signin_to_account(self, self.current_profile)
 
     # Set the status message in the login window.
     def onConnecting(self, progress, message):

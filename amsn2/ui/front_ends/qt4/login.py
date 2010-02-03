@@ -98,7 +98,7 @@ class aMSNLoginWindow(StyledWidget, base.aMSNLoginWindow):
     def hide(self):
         pass
 
-    def setAccounts(self, accountviews):
+    def set_accounts(self, accountviews):
         self._account_views = accountviews
 
         for accv in self._account_views:
@@ -143,7 +143,7 @@ class aMSNLoginWindow(StyledWidget, base.aMSNLoginWindow):
         accv.save_password = self.ui.checkRememberPass.isChecked()
         accv.autologin = self.ui.checkSignInAuto.isChecked()
 
-        self._amsn_core.signinToAccount(self, accv)
+        self._amsn_core.signin_to_accoun_aa(self, accv)
 
     def signout(self):
         pass
@@ -152,7 +152,7 @@ class aMSNLoginWindow(StyledWidget, base.aMSNLoginWindow):
         self.loginThrobber = LoginThrobber(self)
         self._parent.fadeIn(self.loginThrobber)
 
-    def onConnecting(self, progress, message):
+    def on_connecting(self, progress, message):
         self.loginThrobber.status.setText(str(message))
 
     def __on_toggled_cb(self, bool):

@@ -27,21 +27,21 @@ class aMSNContactListWindow(object):
         self._main.send("hideContactListWindow",[])
         pass
 
-    def setTitle(self, text):
+    def set_title(self, text):
         """ This will allow the core to change the current window's title
         @text : a string
         """
         self._main.send("setContactListTitle",[text])
         pass
 
-    def setMenu(self, menu):
+    def set_menu(self, menu):
         """ This will allow the core to change the current window's main menu
         @menu : a MenuView
         """
         self._main.send("setMenu")
         pass
 
-    def myInfoUpdated(self, view):
+    def my_info_updated(self, view):
         """ This will allow the core to change pieces of information about
         ourself, such as DP, nick, psm, the current media being played,...
         @view: the contactView of the ourself (contains DP, nick, psm,
@@ -79,7 +79,7 @@ class aMSNContactListWidget(object):
         self._main.send("hideContactListWidget",[])
         pass
 
-    def contactListUpdated(self, clView):
+    def contactlist_updated(self, clView):
         """ This method will be called when the core wants to notify
         the contact list of the groups that it contains, and where they
         should be drawn a group should be drawn.
@@ -92,7 +92,7 @@ class aMSNContactListWidget(object):
         self._main.send("contactListUpdated",clView.group_ids)
         pass
 
-    def groupUpdated(self, groupView):
+    def group_updated(self, groupView):
         """ This method will be called to notify the contact list
         that a group has been updated.
         The contact list should update its icon and name
@@ -104,7 +104,7 @@ class aMSNContactListWidget(object):
         self._main.send("groupUpdated",[groupView.uid,",".join(groupView.contact_ids),str(groupView.name)])
         pass
 
-    def contactUpdated(self, contactView):
+    def contact_updated(self, contactView):
         """ This method will be called to notify the contact list
         that a contact has been updated.
         The contact can be in any group drawn and his icon,

@@ -28,10 +28,10 @@ class ImageView(object):
         img.imgs = self.imgs[:]
         return img
 
-    def appendImageView(self, iv):
+    def append_imageview(self, iv):
         self.imgs.extend(iv.imgs)
 
-    def prependImageView(self, iv):
+    def prepend_imageview(self, iv):
         self.imgs = iv.imgs[:].extend(self.imgs)
 
     def reset(self):

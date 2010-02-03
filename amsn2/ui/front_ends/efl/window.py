@@ -4,6 +4,7 @@ import evas
 import ecore
 import ecore.evas
 import ecore.x
+import edje
 import elementary
 
 from amsn2.ui import base
@@ -26,22 +27,39 @@ class aMSNWindow(elementary.Window, base.aMSNWindow):
                                       evas.EVAS_HINT_EXPAND)
         self._bg.show()
 
-        self._bx = elementary.Box(self)
-        self.resize_object_add(self._bx)
+        self._ly = elementary.Layout(self)
+        self._ly.file_set(THEME_FILE, "amsn2/win")
+        self.resize_object_add(self._ly)
+        self._ly.size_hint_weight_set(evas.EVAS_HINT_EXPAND,
+                                      evas.EVAS_HINT_EXPAND)
+        self._ly.size_hint_align_set(evas.EVAS_HINT_FILL,
+                                     evas.EVAS_HINT_FILL)
+        self._edje = self._ly.edje_get()
+
+        self._bx = elementary.Box(self._ly)
         self._bx.size_hint_weight_set(evas.EVAS_HINT_EXPAND,
                                       evas.EVAS_HINT_EXPAND)
         self._bx.size_hint_align_set(evas.EVAS_HINT_FILL,
                                      evas.EVAS_HINT_FILL)
+        self._ly.content_set("content", self._bx)
         self._bx.show()
+        self._ly.show()
 
         self._tb = None
 
+    def block(self, block):
+        if block:
+            self._edje.signal_emit("blocker,enable", "")
+        else:
+            self._edje.signal_emit("blocker,disable", "")
 
-    def set_child(self, child):
+    def child_set(self, child):
         if self._child:
             self._bx.unpack(self._child)
         self._child = child
         self._bx.pack_end(child)
+
+    child = property(fset=child_set)
 
     @property
     def _evas(self):
@@ -50,12 +68,11 @@ class aMSNWindow(elementary.Window, base.aMSNWindow):
     def hide(self):
         pass
 
-    def setTitle(self, text):
+    def set_title(self, text):
         self.title_set(text)
 
-    def setMenu(self, mv):
+    def set_menu(self, mv):
         if self._tb:
-            print "QQQQQQ"
             self._bx.unpack(self._tb)
             self._tb.delete()
         if mv is None:
@@ -75,11 +92,11 @@ class aMSNWindow(elementary.Window, base.aMSNWindow):
                 mi = self._tb.item_add(ic, item.label)
                 mi.menu_set(True)
                 tm = mi.menu_get()
-                createMenuFromMenuView(item.items, tm, None)
+                create_menu_from_menuview(item.items, tm, None)
         self._tb.menu_parent_set(self)
         self._tb.show()
 
-    def toggleMenu(self):
+    def toggle_menu(self):
         if self._tb:
             #TODO
             if True:
@@ -90,7 +107,7 @@ class aMSNWindow(elementary.Window, base.aMSNWindow):
     def _on_key_down(self, obj, event):
         pass
 
-def createMenuFromMenuView(items, menu, parent):
+def create_menu_from_menuview(items, menu, parent):
     pass
     for item in items:
         if item.type is MenuItemView.CASCADE_MENU:
@@ -99,7 +116,7 @@ def createMenuFromMenuView(items, menu, parent):
                 #TODO
                 pass
             mi = menu.item_add(parent, item.label, ic)
-            createMenuFromMenuView(item.items, menu, mi)
+            create_menu_from_menuview(item.items, menu, mi)
         elif item.type is MenuItemView.COMMAND:
             ic = None
             if item.icon:

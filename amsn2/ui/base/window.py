@@ -16,20 +16,18 @@ class aMSNWindow(object):
         """ This should hide the window"""
         raise NotImplementedError
 
-    def setTitle(self, text):
+    def set_title(self, text):
         """
         This will allow the core to change the current window's title
 
         @type text: str
         """
-
         raise NotImplementedError
 
-    def setMenu(self, menu):
+    def set_menu(self, menu):
         """
         This will allow the core to change the current window's main menu
 
         @type menu: MenuView
         """
-
         raise NotImplementedError

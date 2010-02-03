@@ -9,7 +9,7 @@ images {
 
 
 group {
-  name: "group_item";
+  name: "amsn2/group_item";
   parts {
     part {
       name: "group_box";

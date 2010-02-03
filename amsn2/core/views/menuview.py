@@ -84,7 +84,7 @@ class MenuItemView(object):
         self.command = command
         self.items = []
 
-    def addItem(self, item):
+    def add_item(self, item):
         self.items.append(item)
 
 
@@ -93,6 +93,6 @@ class MenuView(object):
     def __init__(self):
         self.items = []
 
-    def addItem(self, item):
+    def add_item(self, item):
         self.items.append(item)
 

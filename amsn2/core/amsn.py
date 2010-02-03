@@ -89,23 +89,23 @@ class aMSNCore(object):
         else:
             logger.setLevel(logging.WARNING)
 
-        self.loadUI(self._options.front_end)
+        self.load_UI(self._options.front_end)
 
     def run(self):
         self._main.show()
         self._loop.run()
 
-    def loadUI(self, ui_name):
+    def load_UI(self, ui_name):
         """
         @type ui_name: str
         @param ui_name: The name of the User Interface
         """
 
         self._ui_name = ui_name
-        self._ui_manager.loadUI(ui_name)
-        self._loop = self._ui_manager.getLoop()
+        self._ui_manager.load_UI(ui_name)
+        self._loop = self._ui_manager.get_loop()
 
-    def switchToUI(self, ui_name):
+    def switch_to_UI(self, ui_name):
         """
         @type ui_name: str
         @param ui_name: The name of the User Interface
@@ -114,37 +114,37 @@ class aMSNCore(object):
         #TODO: unloadUI + stop loops??? + loadUI + run
         pass
 
-    def mainWindowShown(self):
-        self._ui_manager.loadSplash()
+    def main_window_shown(self):
+        self._ui_manager.load_splash()
 
-        accounts = self._account_manager.getAvailableAccountViews()
-        self._ui_manager.loadLogin(accounts)
+        accounts = self._account_manager.get_available_accountviews()
+        self._ui_manager.load_login(accounts)
 
-        menu = self.createMainMenuView()
-        self._main.setMenu(menu)
+        menu = self.create_main_menuview()
+        self._main.set_menu(menu)
 
-    def getMainWindow(self):
+    def get_main_window(self):
         return self._main
 
-    def signinToAccount(self, login_window, accountview):
+    def signin_to_account(self, login_window, accountview):
         """
         @type login_window: aMSNLoginWindow
         @type accountview: AccountView
         """
 
         print "Signing in to account %s" % (accountview.email)
-        self._account = self._account_manager.signinToAccount(accountview)
+        self._account = self._account_manager.signin_to_account(accountview)
         self._account.login = login_window
         self._account.login.signin()
         self._account.client = protocol.Client(self, self._account)
         self._account.client.connect(accountview.email, accountview.password)
 
-    def signOutOfAccount(self):
-        accounts = self._account_manager.getAvailableAccountViews()
-        self._ui_manager.loadLogin(accounts)
+    def sign_out_of_account(self):
+        accounts = self._account_manager.get_available_accountviews()
+        self._ui_manager.load_login(accounts)
         self._account.client.logout()
 
-    def connectionStateChanged(self, account, state):
+    def connection_state_changed(self, account, state):
         """
         @type account: aMSNAccount
         @type state: L{papyon.event.ClientState}
@@ -162,64 +162,64 @@ class aMSNCore(object):
         }
 
         if state in status_str:
-            account.login.onConnecting((state + 1)/ 7., status_str[state])
+            account.login.on_connecting((state + 1)/ 7., status_str[state])
 
         elif state == papyon.event.ClientState.OPEN:
-            self._ui_manager.loadContactList()
-            self._personalinfo_manager.setAccount(account)
-            self._contactlist_manager.onCLDownloaded(account.client.address_book)
+            self._ui_manager.load_contactlist()
+            self._personalinfo_manager.set_account(account)
+            self._contactlist_manager.on_CL_downloaded(account.client.address_book)
 
         elif state == papyon.event.ClientState.CLOSED:
-            accounts = self._account_manager.getAvailableAccountViews()
-            self._ui_manager.loadLogin(accounts)
-            self._account.signOut()
+            accounts = self._account_manager.get_available_accountviews()
+            self._ui_manager.load_login(accounts)
+            self._account.sign_out()
             self._account = None
 
-    def idlerAdd(self, func):
+    def idler_add(self, func):
         """
         @type func: function
         """
 
-        self._loop.idlerAdd(func)
+        self._loop.idler_add(func)
 
-    def timerAdd(self, delay, func):
+    def timer_add(self, delay, func):
         """
         @type delay: int
         @param delay: delay in seconds?
         @type func: function
         """
 
-        self._loop.timerAdd(delay, func)
+        self._loop.timer_add(delay, func)
 
     def quit(self):
         if self._account:
-            self._account.signOut()
+            self._account.sign_out()
         if self._loop:
             self._loop.quit()
         logging.shutdown()
         sys.exit(0)
 
-    def createMainMenuView(self):
+    def create_main_menuview(self):
         menu = MenuView()
         quitMenuItem = MenuItemView(MenuItemView.COMMAND, label="Quit",
                                     command = self.quit)
         logOutMenuItem = MenuItemView(MenuItemView.COMMAND, label="Log out",
-                                      command = self.signOutOfAccount)
+                                      command = self.sign_out_of_account)
         mainMenu = MenuItemView(MenuItemView.CASCADE_MENU, label="Main")
-        mainMenu.addItem(logOutMenuItem)
-        mainMenu.addItem(quitMenuItem)
+        mainMenu.add_item(logOutMenuItem)
+        mainMenu.add_item(quitMenuItem)
 
         addContactItem = MenuItemView(MenuItemView.COMMAND, label="Add Contact",
-                                      command=self._contactlist_manager.addContact)
+                                      command=self._contactlist_manager.add_contact)
         removeContact = MenuItemView(MenuItemView.COMMAND, label='Remove contact',
-                                     command=self._contactlist_manager.removeContact)
+                                     command=self._contactlist_manager.remove_contact)
 
         contactsMenu = MenuItemView(MenuItemView.CASCADE_MENU, label="Contacts")
-        contactsMenu.addItem(addContactItem)
-        contactsMenu.addItem(removeContact)
+        contactsMenu.add_item(addContactItem)
+        contactsMenu.add_item(removeContact)
 
-        menu.addItem(mainMenu)
-        menu.addItem(contactsMenu)
+        menu.add_item(mainMenu)
+        menu.add_item(contactsMenu)
 
         return menu
 

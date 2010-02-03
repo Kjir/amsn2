@@ -19,7 +19,7 @@ class aMSNMainWindow(window.aMSNWindow, base.aMSNMainWindow):
         since that class shouldn't be herited
     """
     def __on_show(self, evas_obj):
-        self._amsn_core.mainWindowShown()
+        self._amsn_core.main_window_shown()
 
     def __on_delete_request(self, win):
         self._amsn_core.quit()

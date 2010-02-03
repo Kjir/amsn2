@@ -7,7 +7,7 @@ images {
 
 
 group {
-  name: "contact_item";
+  name: "amsn2/contact_item";
   min: 26 26;
   parts {
     part {

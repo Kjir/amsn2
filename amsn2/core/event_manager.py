@@ -42,15 +42,15 @@ class aMSNEventManager:
 
         elif type is 'rw':
             if self._events_tree[event].insert(callback, deps):
-                self._events_cbs[event][0] = self._events_tree[event].getCallbacksSequence()
+                self._events_cbs[event][0] = self._events_tree[event].get_callbacks_sequence()
             else:
                 print 'Failed adding callback '+callback.__name__+' to event '+event+': missing dependencies'
 
     def unregister(self, event, callback):
         """ unregister a callback for an event """
-        if self._events_tree[event].isListed(callback):
+        if self._events_tree[event].is_listed(callback):
             self._events_tree[event].remove(callback)
-            self._events_cbs[event][0] = self._events_tree.getCallbacksSequence()
+            self._events_cbs[event][0] = self._events_tree.get_callbacks_sequence()
         else:
             self._events_cbs[event][1].remove(callback)
 
@@ -68,7 +68,7 @@ class aMSNEventCallback:
         for dep in self._deps:
             if cb.id == dep or (\
                cb._tree.right is not None and \
-               cb._tree.right.isListed(dep)):
+               cb._tree.right.is_listed(dep)):
                 return True
         return False
 
@@ -81,7 +81,7 @@ class aMSNEventTree:
         self._elements = set()
 
     def remove(self, callback_function):
-        if self.isListed(callback_function.__name__):
+        if self.is_listed(callback_function.__name__):
             cb_obj = self._find(callback_function.__name__)
 
             # keep callbacks that do not depend on the one being removed
@@ -104,11 +104,11 @@ class aMSNEventTree:
     # FIXME: what if a dependence is not yet in the tree?
     def insert(self, callback_function, deps=[]):
         cb_obj = aMSNEventCallback(self, callback_function, deps)
-        if self.isListed(cb_obj.id):
+        if self.is_listed(cb_obj.id):
             self.remove(callback_function)
             print 'Trying to add already added callback '+callback_function.__name__
 
-        deps_satisfied = [self.isListed(dep) for dep in deps]
+        deps_satisfied = [self.is_listed(dep) for dep in deps]
 
         # workaround if there are no dependencies
         deps_satisfied.extend([True, True])
@@ -120,10 +120,10 @@ class aMSNEventTree:
             # can't satisfy all dependencies
             return False
 
-    def isListed(self, item):
+    def is_listed(self, item):
         return item in self._elements
 
-    def getCallbacksSequence(self):
+    def get_callbacks_sequence(self):
         return self._inorder([])
 
     def _insert(self, cb):
@@ -151,9 +151,9 @@ class aMSNEventTree:
         return q
 
     def _find(self, str_id):
-        if self.left is not None and self.left.isListed(str_id):
+        if self.left is not None and self.left.is_listed(str_id):
             return self.left._find(str_id)
-        elif self.right is not None and self.right.isListed(str_id):
+        elif self.right is not None and self.right.is_listed(str_id):
             return self.right._find(str_id)
         elif self.root.id == str_id:
             return self.root

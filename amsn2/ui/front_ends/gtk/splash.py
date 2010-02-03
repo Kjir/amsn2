@@ -11,8 +11,8 @@ class aMSNSplashScreen(base.aMSNSplashScreen):
     def hide(self):
         pass
 
-    def setText(self, text):
+    def set_text(self, text):
         pass
 
-    def setImage(self, image):
+    def set_image(self, image):
         pass

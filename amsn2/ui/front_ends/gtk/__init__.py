@@ -6,7 +6,12 @@ import sys
 # We need to import the front end module and return it
 # so the guimanager can access its classes
 def load():
-    import gtk_
+    try:
+        import gtk_
+    except ImportError, e:
+        etype, value, tb = sys.exc_info()
+        traceback.print_exception(etype, value, tb.tb_next)
+        return None
     return gtk_
 
 # Initialize the front end by checking for any
@@ -15,7 +20,7 @@ try:
     import imp
 
     imp.find_module("gtk")
-    aMSNUserInterfaceManager.registerFrontEnd("gtk", sys.modules[__name__])
+    aMSNUserInterfaceManager.register_frontend("gtk", sys.modules[__name__])
 
 except ImportError:
     pass

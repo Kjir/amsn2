@@ -3,7 +3,7 @@ images {
 }
 
 group {
- name: "contact_list";
+ name: "amsn2/contact_list";
 
  parts {
    part {
