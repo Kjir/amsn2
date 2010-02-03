@@ -23,11 +23,5 @@ class aMSNMainLoop(base.aMSNMainLoop):
         gobject.timeout_add(delay, func)
 
     def quit(self):
-        import curses
-        stdscr = self._amsn_core.getMainWindow()._stdscr
-        curses.nocbreak()
-        stdscr.keypad(0)
-        curses.echo()
-        curses.endwin()
         self._mainloop.quit()
 

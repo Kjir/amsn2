@@ -2,6 +2,7 @@
 from amsn2.ui import base
 
 import urwid
+import sys
 
 class aMSNMainWindow(base.aMSNMainWindow):
     def __init__(self, amsn_core):

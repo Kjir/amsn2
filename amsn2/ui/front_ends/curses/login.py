@@ -60,8 +60,8 @@ class aMSNLoginWindow(object):
         self._main = parent._main
 
     def show(self):
-        txt = urwid.Text("Welcome to aMSN2", align='center')
-        self._main.widget = urwid.Filler(txt)
+        txt = urwid.Edit("Username:")
+        self._main.widget = urwid.ListBox([txt, urwid.Divider(), urwid.Edit("Password:")])
         self._main.run()
         #self.signin()
 
