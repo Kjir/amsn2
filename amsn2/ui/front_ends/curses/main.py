@@ -11,7 +11,7 @@ class aMSNMainWindow(base.aMSNMainWindow):
     def show(self):
         palette = [
                 ('bg', 'light gray', 'black'),
-                ('label', 'yellow', 'light gray')]
+                ('label', 'yellow', 'dark blue')]
         self._main = urwid.MainLoop(None, palette, unhandled_input=self.__handle_commands)
         self._amsn_core.idler_add(self.__on_show)
 

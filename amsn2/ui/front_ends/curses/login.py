@@ -60,17 +60,15 @@ class aMSNLoginWindow(object):
         self._main = parent._main
 
     def show(self):
-        txt = urwid.Edit("Username:")
-        self._main.widget = urwid.ListBox([txt, urwid.Divider(), urwid.Edit("Password:")])
+        self._username_t = urwid.Edit(("label", "Username:"))
+        self._password_t = urwid.Edit(("label", "Password:"))
+        self._main.widget = urwid.ListBox([self._username_t, self._password_t])
+        self._main.unhandled_input = self.handle_input
         self._main.run()
-        #self.signin()
 
     def hide(self):
         self._username_t = None
         self._password_t = None
-        self._win = None
-        self._stdscr.clear()
-        self._stdscr.refresh()
 
     def switch_to_profile(self, profile):
         self.current_profile = profile
@@ -78,11 +76,10 @@ class aMSNLoginWindow(object):
             self._username = self.current_profile.email
             self._password = self.current_profile.password
 
-    def signin(self):
-        self.current_profile.email = self._username_t.value()
-        self.current_profile.password = self._password_t.value()
-        self._amsn_core.signin_to_account(self, self.current_profile)
-
+    def create_profile(self):
+        self.current_profile.email = self._username_t.get_edit_text()
+        self.current_profile.password = self._password_t.get_edit_text()
+        return self.current_profile
 
     def on_connecting(self, progress, message):
         self._username_t = None
@@ -101,3 +98,15 @@ class aMSNLoginWindow(object):
         for a in self.accounts:
             self.switch_to_profile(a)
             break
+
+    def signin(self):
+        pass
+
+    def signout(self):
+        pass
+
+    def handle_input(self, k):
+        if k == 'enter':
+            self._amsn_core.signin_to_account(self, self.create_profile())
+        else:
+            print k
