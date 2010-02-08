@@ -1,20 +1,22 @@
 
 from amsn2.ui import base
 import gobject
+import urwid
+
 gobject.threads_init()
 
 class aMSNMainLoop(base.aMSNMainLoop):
     def __init__(self, amsn_core):
         self._amsn_core = amsn_core
+        palette = [
+                ('bg', 'light gray', 'black'),
+                ('label', 'yellow', 'dark blue')]
+        frame = urwid.Frame(urwid.Filler(urwid.Text("aMSN2")),header=urwid.Text("Welcome to aMSN2"),footer=urwid.Text("(cmd)"))
+        self._main = urwid.MainLoop(frame, palette, event_loop=urwid.GLibEventLoop())
+        self._mainloop = self._main.event_loop
 
     def run(self):
-        self._mainloop = gobject.MainLoop(is_running=True)
-
-        while self._mainloop.is_running():
-            try:
-                self._mainloop.run()
-            except KeyboardInterrupt:
-                self.quit()
+        self._main.run()
 
     def idler_add(self, func):
         gobject.idle_add(func)
@@ -23,5 +25,5 @@ class aMSNMainLoop(base.aMSNMainLoop):
         gobject.timeout_add(delay, func)
 
     def quit(self):
-        self._mainloop.quit()
+        raise urwid.ExitMainLoop()
 

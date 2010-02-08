@@ -62,9 +62,9 @@ class aMSNLoginWindow(object):
     def show(self):
         self._username_t = urwid.Edit(("label", "Username:"))
         self._password_t = urwid.Edit(("label", "Password:"))
-        self._main.widget = urwid.ListBox([self._username_t, self._password_t])
+        self._main.widget.set_body(urwid.ListBox([self._username_t, self._password_t]))
         self._main.unhandled_input = self.handle_input
-        self._main.run()
+        self._main.draw_screen()
 
     def hide(self):
         self._username_t = None
@@ -82,12 +82,7 @@ class aMSNLoginWindow(object):
         return self.current_profile
 
     def on_connecting(self, progress, message):
-        self._username_t = None
-        self._password_t = None
-        self._win.clear()
-
-        self._win.addstr(10, 25, message, curses.A_BOLD | curses.A_STANDOUT)
-        self._win.refresh()
+        self._main.widget.body.get_body().set_text(message)
 
     def set_accounts(self, account_views):
         self.accounts = account_views
@@ -100,7 +95,9 @@ class aMSNLoginWindow(object):
             break
 
     def signin(self):
-        pass
+        self._username_t = None
+        self._password_t = None
+        self._main.widget.set_body(urwid.Filler(urwid.Text("Logging in..."), valign='middle'))
 
     def signout(self):
         pass
