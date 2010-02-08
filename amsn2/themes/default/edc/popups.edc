@@ -1,0 +1,119 @@
+// Based on amsn2 popus
+
+images {
+  image: "shadow_under_bigger.png" COMP;
+}
+
+////////////////////////////////////////////////////////////////////////////
+// Simple floating popup
+////////////////////////////////////////////////////////////////////////////
+group {
+  name: "amsn2/floater";
+  parts {
+     part {
+        name: "shadow";
+        type: IMAGE;
+        mouse_events: 0;
+        description {
+           state: "default" 0.0;
+           rel1 {
+              relative: 0.0 0.0;
+              offset: -14 -6;
+           }
+           rel2 {
+              relative: 1.0 1.0;
+              offset: 5 13;
+           }
+           image {
+              normal: "shadow_under_bigger.png";
+              border: 14 6 6 14;
+              middle: 0;
+           }
+        }
+     }
+
+     part {
+        name: "bg";
+        type: RECT;
+        description {
+           state: "default" 0.0;
+           color: 224 224 224 255;
+           rel1.relative: 0.0 0.0;
+           rel2.relative: 1.0 1.0;
+           rel2.offset: -1 -1;
+        }
+     }
+     part {
+        name: "title.bg";
+        type: GRADIENT;
+        description {
+           state: "default" 0.0;
+           gradient.spectrum: "bg";
+           rel1 {
+              to: "bg";
+              relative: 0.0 0.0;
+              offset: 0 0;
+           }
+           rel2 {
+              to: "bg";
+              relative: 1.0 0.0;
+              offset: 0 20;
+           }
+        }
+     }
+     part {
+        name: "title.text";
+        type: TEXT;
+        description {
+           state: "default" 0.0;
+           align: 0.5 0.5;
+           color_class: "default_label";
+           text {
+              text: "TITLE";
+              font: "Sans:style=Bold";
+              size: 12;
+              align: 0.5 0.5;
+           }
+           rel1.to: "title.bg";
+           rel2.to: "title.bg";
+        }
+     }
+     part {
+        name: "content";
+        type: SWALLOW;
+        description {
+           state: "default" 0.0;
+           rel1 {
+              to: "title.bg";
+              relative: 0.0 1.0;
+           }
+           rel2 {
+              to: "actions";
+              relative: 1.0 0.0;
+              offset: -1 -2;
+           }
+        }
+     }
+     part {
+        name: "actions";
+        type: BOX;
+        description {
+           state: "default" 0.0;
+           box {
+              layout: "horizontal";
+           }
+           rel1 {
+              to: "bg";
+              relative: 0.0 1.0;
+              offset: 5 -30;
+           }
+           rel2 {
+              to: "bg";
+              relative: 1.0 1.0;
+              offset: -6 -3;
+           }
+        }
+     }
+  }
+}
+

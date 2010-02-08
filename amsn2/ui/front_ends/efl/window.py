@@ -18,8 +18,6 @@ class aMSNWindow(elementary.Window, base.aMSNWindow):
         self.on_key_down_add(self._on_key_down)
         self.fullscreen = False
         self.name_class_set = (WM_NAME, WM_CLASS)
-        #self._has_menu = False
-        self._child = None
 
         self._bg = elementary.Background(self)
         self.resize_object_add(self._bg)
@@ -35,14 +33,6 @@ class aMSNWindow(elementary.Window, base.aMSNWindow):
         self._ly.size_hint_align_set(evas.EVAS_HINT_FILL,
                                      evas.EVAS_HINT_FILL)
         self._edje = self._ly.edje_get()
-
-        self._bx = elementary.Box(self._ly)
-        self._bx.size_hint_weight_set(evas.EVAS_HINT_EXPAND,
-                                      evas.EVAS_HINT_EXPAND)
-        self._bx.size_hint_align_set(evas.EVAS_HINT_FILL,
-                                     evas.EVAS_HINT_FILL)
-        self._ly.content_set("content", self._bx)
-        self._bx.show()
         self._ly.show()
 
         self._tb = None
@@ -54,10 +44,8 @@ class aMSNWindow(elementary.Window, base.aMSNWindow):
             self._edje.signal_emit("blocker,disable", "")
 
     def child_set(self, child):
-        if self._child:
-            self._bx.unpack(self._child)
-        self._child = child
-        self._bx.pack_end(child)
+        self._ly.content_set("content", child)
+        child.size_hint_weight_set(1, 1)
 
     child = property(fset=child_set)
 
@@ -73,7 +61,6 @@ class aMSNWindow(elementary.Window, base.aMSNWindow):
 
     def set_menu(self, mv):
         if self._tb:
-            self._bx.unpack(self._tb)
             self._tb.delete()
         if mv is None:
             return
@@ -82,7 +69,7 @@ class aMSNWindow(elementary.Window, base.aMSNWindow):
         self._tb.align = 0.0
         self._tb.size_hint_weight_set(0.0, 0.0)
         self._tb.size_hint_align_set(evas.EVAS_HINT_FILL, 0.0)
-        self._bx.pack_start(self._tb)
+        self._ly.content_set("menubar", self._tb)
         for item in mv.items:
             if item.type is MenuItemView.CASCADE_MENU:
                 ic = None
