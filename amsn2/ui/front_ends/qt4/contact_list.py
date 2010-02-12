@@ -216,7 +216,7 @@ class aMSNContactListWidget(StyledWidget, base.aMSNContactListWidget):
 
         gitem.child(self._model.indexFromItem(citem).row(), 3).setData(QVariant(contact), Qt.DisplayRole)
         cname = StringView()
-        cname = contact.name.toHtmlString()
+        cname = contact.name.to_HTML_string()
         gitem.child(self._model.indexFromItem(citem).row(), 0).setText(QString.fromUtf8(cname))
 
     def group_updated(self, group):
@@ -227,7 +227,7 @@ class aMSNContactListWidget(StyledWidget, base.aMSNContactListWidget):
         self._model.item(self._model.indexFromItem(gitem).row(), 3).setData(QVariant(group), Qt.DisplayRole)
         gname = StringView()
         gname = group.name
-        self._model.item((self._model.indexFromItem(gitem)).row(), 0).setText('<b>'+QString.fromUtf8(gname.toHtmlString())+'</b>')
+        self._model.item((self._model.indexFromItem(gitem)).row(), 0).setText('<b>'+QString.fromUtf8(gname.to_HTML_string())+'</b>')
 
         try:
             cuids = self.contacts[group.uid]

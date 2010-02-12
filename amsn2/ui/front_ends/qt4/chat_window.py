@@ -92,7 +92,7 @@ class aMSNChatWidget(QWidget, base.aMSNChatWidget):
     def processInput(self):
         """ Here we process what is inside the widget... so showing emoticon
         and similar stuff"""
-
+        
         QObject.disconnect(self.ui.inputWidget, SIGNAL("textChanged()"), self.processInput)
 
         self.text = QString(self.ui.inputWidget.toHtml())
@@ -136,9 +136,9 @@ class aMSNChatWidget(QWidget, base.aMSNChatWidget):
         msg = QString.fromUtf8(self.ui.inputWidget.toPlainText())
         self.ui.inputWidget.clear()
         strv = StringView()
-        strv.appendText(str(msg))
+        strv.append_text(str(msg))
         ## as we send our msg to the conversation:
-        self._amsn_conversation.sendMessage(strv)
+        self._amsn_conversation.send_message(strv)
         # this one will also notify us of our msg.
         # so no need to do:
         #self.ui.textEdit.append("<b>/me says:</b><br>"+unicode(msg)+"")
@@ -148,7 +148,7 @@ class aMSNChatWidget(QWidget, base.aMSNChatWidget):
         self.ui.textEdit.append("<b>/me sent a nudge</b>")
 
     def __typingNotification(self):
-        self._amsn_conversation.sendTypingNotification()
+        self._amsn_conversation.send_typing_notification()
 
     def appendTextAtCursor(self, text):
         self.ui.inputWidget.textCursor().insertHtml(unicode(text))
@@ -157,25 +157,25 @@ class aMSNChatWidget(QWidget, base.aMSNChatWidget):
         self.ui.inputWidget.textCursor().insertHtml(QString("<img src=\"" + str(image) + "\" />"))
 
     def on_user_joined(self, contact):
-        self.ui.textEdit.append(unicode("<b>"+QString.fromUtf8(contact.toHtmlString())+" "+self.tr("has joined the conversation")+("</b>")))
+        self.ui.textEdit.append(unicode("<b>"+QString.fromUtf8(contact.to_HTML_string())+" "+self.tr("has joined the conversation")+("</b>")))
         pass
 
     def on_user_left(self, contact):
-        self.ui.textEdit.append(unicode("<b>"+QString.fromUtf8(contact.toHtmlString())+" "+self.tr("has left the conversation")+("</b>")))
+        self.ui.textEdit.append(unicode("<b>"+QString.fromUtf8(contact.to_HTML_string())+" "+self.tr("has left the conversation")+("</b>")))
         pass
 
     def on_user_typing(self, contact):
-        self._statusBar.showMessage(unicode(QString.fromUtf8(contact.toHtmlString()) + " is typing"), 7000)
+        self._statusBar.showMessage(unicode(QString.fromUtf8(contact.to_HTML_string()) + " is typing"), 7000)
 
     def on_message_received(self, messageview, formatting=None):
         print "Ding!"
 
-        text = messageview.toStringView().toHtmlString()
+        text = messageview.to_stringview().to_HTML_string()
         text = cgi.escape(text)
         nick, msg = text.split('\n', 1)
         nick = nick.replace('\n', '<br/>')
         msg = msg.replace('\n', '<br/>')
-        sender = messageview.sender.toHtmlString()
+        sender = messageview.sender.to_HTML_string()
 
         # peacey: Check formatting of styles and perform the required changes
         if formatting:
@@ -210,7 +210,7 @@ class aMSNChatWidget(QWidget, base.aMSNChatWidget):
         self.last_sender = sender
 
     def on_nudge_received(self, sender):
-        self.ui.textEdit.append(unicode("<b>"+QString.fromUtf8(sender.toHtmlString())+" "+self.tr("sent you a nudge!")+("</b>")))
+        self.ui.textEdit.append(unicode("<b>"+QString.fromUtf8(sender.to_HTML_string())+" "+self.tr("sent you a nudge!")+("</b>")))
         pass
 
 

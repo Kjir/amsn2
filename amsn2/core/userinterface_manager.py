@@ -103,7 +103,7 @@ class aMSNUserInterfaceManager(object):
         em = self._core._event_manager
         em.unregister(em.events.PERSONALINFO_UPDATED, self._contactlist.my_info_updated)
 
-        clwidget = self._contactlist.get_ontactlist_widget()
+        clwidget = self._contactlist.get_contactlist_widget()
         em.unregister(em.events.CLVIEW_UPDATED, clwidget.contactlist_updated)
         em.unregister(em.events.GROUPVIEW_UPDATED, clwidget.group_updated)
         em.unregister(em.events.CONTACTVIEW_UPDATED, clwidget.contact_updated)
